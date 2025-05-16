@@ -5,22 +5,8 @@
 }
 
 body {
-  font-family: "Poppins";
-  background-image: linear-gradient(
-    to bottom,
-    #5987dc,
-    #5f95e4,
-    #68a3eb,
-    #73b1f1,
-    #80bff7,
-    #94c6fa,
-    #a6cdfc,
-    #b6d5ff,
-    #cbd9ff,
-    #ddddff,
-    #ece3ff,
-    #f8e9ff
-  );
+  font-family: var(--user-font-family, 'Poppins', sans-serif);
+  background-image: var(--bg-gradient);
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -36,14 +22,8 @@ header {
   top: 40px;
   width: 100%;
   z-index: 10;
-  color: #fff;
+  color: var(--header);
   align-items: center;
-}
-
-header .logo {
-  font-size: 20px;
-  font-weight: bold;
-  padding-left: 60px;
 }
 
 header .logo {
@@ -64,7 +44,7 @@ nav ul li {
 
 nav ul li a {
   font-size: 18px;
-  color: #fff;
+  color: var(--header);
   text-decoration: none;
 }
 
@@ -77,49 +57,49 @@ main {
   margin-top: 50px;
 }
 
-form {
-  background-color: #ffffff;
+.contact-form {
+  background-color: var(--contact-form-bg); 
   padding: 20px;
   border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 8px var(--contact-form-shadow);
   width: 100%;
   max-width: 500px;
   margin: 0 auto;
 }
 
-label {
+.contact-form label {
   font-size: 1.1rem;
   margin-bottom: 8px;
   display: block;
-  color: #333;
+  color: var(--contact-form-label); 
 }
 
-input,
-textarea {
+.contact-form input,
+.contact-form textarea {
   width: 100%;
   padding: 12px;
   margin-bottom: 20px;
-  border: 2px solid #ccc;
+  border: 2px solid var(--contact-textarea);
   border-radius: 4px;
   font-size: 1rem;
   box-sizing: border-box;
 }
 
-input:focus,
-textarea:focus {
-  border-color: #5987dc;
+.contact-form input:focus,
+.contact-form textarea:focus {
+  border-color: var(--focus-border); 
   outline: none;
-  box-shadow: 0 0 5px rgba(89, 135, 220, 0.5);
+  box-shadow: 0 0 5px var(--focus-glow); 
 }
 
-textarea {
+.contact-form textarea {
   resize: vertical;
   min-height: 150px;
 }
 
 button {
-  background-color: #5987dc;
-  color: white;
+  background-color: var(--submit-button-bg); 
+  color: var(--submit-button);
   font-size: 1.1rem;
   padding: 12px 20px;
   border: none;
@@ -130,10 +110,10 @@ button {
 }
 
 button:hover {
-  background-color: #477db8;
+  background-color: var(--submit-button-hover);
 }
 
 footer {
   text-align: center;
-  color: #333;
+  color: var(--footer);
 }
