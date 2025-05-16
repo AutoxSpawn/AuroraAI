@@ -165,17 +165,6 @@ function autoScroll() {
   });
 }
 
-//show a notifaction after form submission
-function showNotification(event) {
-  event.preventDefault();
-
-  alert("Your message has been successfully submitted! Thank you!");
-
-  document.getElementById("name").value = "";
-  document.getElementById("email").value = "";
-  document.getElementById("message").value = "";
-}
-
 function toggleGameCatalog() {
   const chatSection = document.querySelector(".chatbox");
   const gameCatalog = document.getElementById("gameCatalog");
@@ -298,28 +287,6 @@ function appendChatMessage(sender, message) {
   );
   document.getElementById("messageList").appendChild(messageItem);
 }
-
-//dropdown menu
-function dropDownFunction() {
-  document.getElementById("settingMenu").classList.toggle("show");
-}
-// close the dropdown menu if the user clicks
-window.onclick = function (event) {
-  if (
-    !event.target.matches("dropdownButton") &&
-    !event.target.closest(".drop-wrapper")
-  ) {
-    var menu = document.getElementsByClassName("menu");
-    var i;
-
-    for (i = 0; i < menu.length; i++) {
-      var openMenu = menu[i];
-      if (openMenu.classList.contains("show")) {
-        openMenu.classList.remove("show");
-      }
-    }
-  }
-};
 
 let secretWord = "";
 let maxAttempts = 6;
