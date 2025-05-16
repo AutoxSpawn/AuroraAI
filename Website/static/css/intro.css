@@ -1,12 +1,5 @@
 body {
-  background-image: linear-gradient(
-    to bottom,
-    #527fbe,
-    #6896cf,
-    #70a4dd,
-    #78b1ea,
-    #80bff7
-  );
+  background-image: var(--bg-gradient);
   color: white;
   height: 100vh;
   width: 100vw;
