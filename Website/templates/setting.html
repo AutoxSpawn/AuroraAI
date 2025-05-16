@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en" class="light-theme size-medium font-poppins">
+<head>
+  
+  <meta charset="UTF-8">
+  <title>Settings</title>
+  <link rel="shortcut icon" href="{{ url_for('static', filename='images/favicon.ico')}}">
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/dynamicStyles.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/dropMenu.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/setting.css')}}">
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Koh+Santepheap:wght@100;300;400;700;900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Solway:wght@300;400;500;700;800&family=Zain:ital,wght@0,200;0,300;0,400;0,700;0,800;0,900;1,300;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Marck+Script&family=Montserrat+Alternates:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Pacifico&family=Playwrite+AU+NSW:wght@100..400&display=swap" rel="stylesheet">
+
+  <!-- Icons -->
+  <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+  <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+</head>
+
+<body>
+  <header>
+    <div class="logo">Aurora AI</div>
+    <nav>
+      <ul>
+        <li><a href="{{ url_for('home') }}">Home</a></li>
+        <li><a href="{{ url_for('about') }}">About</a></li>
+        {% include 'dropMenu.html' %}
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+    <form id="settingsForm">
+      <h2>Customize Your AuroraAI</h2>
+
+      <!-- Font Family -->
+      <div class="fontButtonGp">
+        <p class="group-title">Font Family</p>
+        <button type="button" class="font-option poppins-font">Poppins</button>
+        <button type="button" class="font-option serif-font">DM Serif Display</button>
+        <button type="button" class="font-option montserrat-font">Montserrat Alternates</button>
+        <button type="button" class="font-option playwrite-font">Playwrite Australia NSW</button>
+        <button type="button" class="font-option marck-font">Marck Script</button>
+        <button type="button" class="font-option pacifico-font">Pacifico</button>
+      </div>
+
+      <!-- Font Size -->
+      <div class="fontSizeGp">
+        <p class="group-title">Font Size</p>
+        <button type="button" class="small-size">Small</button>
+        <button type="button" class="medium-size">Medium</button>
+        <button type="button" class="large-size">Large</button>
+      </div>
+
+      <!-- Avatar Style -->
+      <div class="avatarGp">
+        <p class="group-title">Avatar</p>
+        <button type="button" class="avatar-option aurora">Aurora</button>
+        <button type="button" class="avatar-option chibi">Chibi</button>
+        <button type="button" class="avatar-option dog">Dog</button>
+      </div>
+
+      <!-- Save Button -->
+      <button type="button" class="saveButton" onclick="saveSettings()">Save Settings</button>
+    </form>
+  </main>
+
+  <footer>
+    <p>2024-2025
+            Group 5 | Drexel University</p>
+  </footer>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+  // Apply saved settings on load
+  applySavedSettings();
+  
+  // Setup button groups
+  setupButtonGroups();
+});
+
+function applySavedSettings() {
+  // Font family
+  const savedFont = localStorage.getItem('selectedFontClass');
+  if (savedFont) {
+    document.documentElement.className = document.documentElement.className
+      .replace(/\bfont-\S+/g, '') // Remove all existing font classes
+      .replace(/\blight-theme\b/, 'light-theme') // Keep theme class
+      .replace(/\bsize-\S+/g, ''); // Remove size classes (handled below)
+    document.documentElement.classList.add(savedFont);
+    
+    // Set matching button as selected
+    const fontButtons = document.querySelectorAll('.fontButtonGp button');
+    fontButtons.forEach(btn => {
+      if (btn.classList.contains(savedFont.replace('font-', '') + '-font')) {
+        btn.classList.add('selected');
+      }
+    });
+  }
+
+  // Font size
+  const savedSize = localStorage.getItem('selectedFontSize');
+  if (savedSize) {
+    document.documentElement.classList.remove('size-small', 'size-medium', 'size-large');
+    document.documentElement.classList.add(`size-${savedSize}`);
+    
+    // Set matching button as selected
+    const sizeBtn = document.querySelector(`.${savedSize}-size`);
+    if (sizeBtn) sizeBtn.classList.add('selected');
+  }
+}
+
+function setupButtonGroups() {
+  function setupGroup(groupSelector) {
+    const group = document.querySelector(groupSelector);
+    const buttons = group.querySelectorAll('button');
+
+    buttons.forEach(button => {
+      button.addEventListener('click', function() {
+        buttons.forEach(btn => btn.classList.remove('selected'));
+        this.classList.add('selected');
+      });
+    });
+  }
+
+  setupGroup('.fontButtonGp');
+  setupGroup('.fontSizeGp');
+  setupGroup('.avatarGp');
+}
+
+function saveSettings() {
+  const selectedFont = document.querySelector('.fontButtonGp .selected');
+  const selectedSize = document.querySelector('.fontSizeGp .selected');
+
+  if (selectedFont) {
+    const fontClassMap = {
+      "Poppins": "font-poppins",
+      "DM Serif Display": "font-serif",
+      "Montserrat Alternates": "font-montserrat",
+      "Playwrite Australia NSW": "font-playwrite",
+      "Marck Script": "font-marck",
+      "Pacifico": "font-pacifico"
+    };
+
+    const fontName = selectedFont.textContent.trim();
+    const fontClass = fontClassMap[fontName];
+
+    if (fontClass) {
+      // Remove all font classes first
+      document.documentElement.className = document.documentElement.className
+        .replace(/\bfont-\S+/g, '')
+        .replace(/\blight-theme\b/, 'light-theme')
+        .replace(/\bsize-\S+/g, '');
+      
+      document.documentElement.classList.add(fontClass);
+      localStorage.setItem('selectedFontClass', fontClass);
+    }
+  }
+
+  if (selectedSize) {
+    let sizeClass;
+    if (selectedSize.classList.contains('small-size')) {
+      sizeClass = 'small';
+    } else if (selectedSize.classList.contains('medium-size')) {
+      sizeClass = 'medium';
+    } else if (selectedSize.classList.contains('large-size')) {
+      sizeClass = 'large';
+    }
+    
+    document.documentElement.classList.remove('size-small', 'size-medium', 'size-large');
+    document.documentElement.classList.add(`size-${sizeClass}`);
+    localStorage.setItem('selectedFontSize', sizeClass);
+  }
+
+  alert("Settings Saved!");
+}
+  </script>
+</body>
+</html>
