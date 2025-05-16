@@ -5,22 +5,8 @@
 }
 
 body {
-  font-family: "Poppins";
-  background-image: linear-gradient(
-    to bottom,
-    #5987dc,
-    #5f95e4,
-    #68a3eb,
-    #73b1f1,
-    #80bff7,
-    #94c6fa,
-    #a6cdfc,
-    #b6d5ff,
-    #cbd9ff,
-    #ddddff,
-    #ece3ff,
-    #f8e9ff
-  );
+  font-family: var(--user-font-family, 'Poppins', sans-serif);
+  background-image: var(--bg-gradient);
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -36,7 +22,7 @@ header {
   top: 40px;
   width: 100%;
   z-index: 10;
-  color: #fff;
+  color: var(--header);
   align-items: center;
 }
 
@@ -64,7 +50,7 @@ nav ul li {
 
 nav ul li a {
   font-size: 18px;
-  color: #fff;
+  color: var(--header);
   text-decoration: none;
 }
 
