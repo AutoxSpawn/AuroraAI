@@ -1,11 +1,10 @@
 .nav-dropdown {
     display: flex;
-    font-family: sans-serif;
     line-height: 1.5;
     justify-content: center;
     transform: background-color 1s ease;
     color: var(--text-primary);
-    font-family: 'Poppins', sans-serif;
+    font-family: var(--user-font-family, 'Poppins', sans-serif);
 }
 
 .drop-wrapper .dropdown{
@@ -53,7 +52,7 @@
 
 .drop-wrapper .menu-header-title {
     font-size: 1.2rem;
-    color: var(--drop-menu-divider);
+    color: var(--text-primary);
     font-weight: 700;
 }
 
