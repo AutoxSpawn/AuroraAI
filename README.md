@@ -1,0 +1,2 @@
+# AuroraAI
+AI Girlfriend Project
