@@ -1,17 +1,10 @@
-<!DOCTYPE html>
-<html lang="en" class="light-theme">
 <head>
-    <meta charset="UTF-8">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/dropMenu.css')}}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/themeColor.css') }}">
-    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
-    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
-    <title>Drop Down Menu</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Marck+Script&family=Montserrat+Alternates:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Pacifico&family=Playwrite+AU+NSW:wght@100..400&display=swap" rel="stylesheet">
 </head>
 
 <li class="nav-dropdown">
   <div class="drop-wrapper">
-    <button onclick="dropDownFunction()" class="dropDownButton">
+    <button class="dropDownButton">
       <ion-icon name="settings-outline"></ion-icon>
     </button>
     <div id="settingMenu" class="menu">
@@ -41,10 +34,60 @@
   
       <div class="menu-body">
         <a href="{{ url_for('setting') }}">Setting</a>
-        <a href="{{ url_for('contact')}}">Contact</a>
+        <a href="{{ url_for('contact') }}">Contact</a>
       </div>
     </div>
   </div>
 </li>
-</html>
-  
+
+<script>
+  //Theme Switcher (was delected from js, have not change in repo)
+  function initializeThemeSwitcher() {
+      const savedTheme = localStorage.getItem("theme") || "light";
+      
+      // Apply theme immediately
+      applyTheme(savedTheme);
+      
+      // Set up radio buttons if they exist
+      const lightThemeRadio = document.getElementById("light-theme");
+      const darkThemeRadio = document.getElementById("dark-theme");
+      
+      if (lightThemeRadio && darkThemeRadio) {
+          if (savedTheme === "dark") darkThemeRadio.checked = true;
+          else lightThemeRadio.checked = true;
+          
+          lightThemeRadio.addEventListener("change", () => applyTheme("light"));
+          darkThemeRadio.addEventListener("change", () => applyTheme("dark"));
+      }
+  }
+
+  function applyTheme(theme) {
+      const html = document.documentElement;
+      html.classList.remove("light-theme", "dark-theme");
+      html.classList.add(`${theme}-theme`);
+      localStorage.setItem("theme", theme);
+  }
+
+  // drop down menu show function (was delected from js, havent change it in repo)
+  document.addEventListener('DOMContentLoaded', function() {
+
+    initializeThemeSwitcher();
+
+    const dropDownButton = document.querySelector('.dropDownButton');
+    const settingMenu = document.getElementById('settingMenu');
+    
+    if (dropDownButton && settingMenu) {
+      dropDownButton.addEventListener('click', function(event) {
+        event.stopPropagation();
+        settingMenu.classList.toggle('show');
+      });
+      
+      // Close dropdown when clicking outside
+      document.addEventListener('click', function(event) {
+        if (!event.target.closest('.drop-wrapper')) {
+          settingMenu.classList.remove('show');
+        }
+      });
+    }
+  });
+</script>
