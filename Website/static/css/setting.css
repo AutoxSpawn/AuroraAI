@@ -1,0 +1,137 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: var(--user-font-family, 'Poppins', sans-serif);
+    background-image: var(--bg-gradient);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding-top: 60px;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    padding: 20px;
+    position: fixed;
+    top: 40px;
+    width: 100%;
+    z-index: 10;
+    color: var(--header);
+    align-items: center;
+}
+
+header .logo {
+    font-size: 20px;
+    font-weight: bold;
+    padding-left: 60px; 
+}
+
+nav ul {
+    display: flex;
+    list-style-type: none;
+    align-items: center;
+}
+
+nav ul li {
+    margin-right: 60px;
+}
+
+nav ul li a {
+    font-size: 18px;
+    color: var(--header);
+    text-decoration: none;
+}
+
+main {
+    text-align: center;
+    color: var(--setting-text);
+    padding-top: 140px;
+}
+
+main h2 {
+    font-size: 36px;
+    margin-bottom: 40px;
+}
+
+.group-title {
+    font-size: 28px;
+    margin-bottom: 20px;
+    margin-top: 30px;
+}
+
+button {
+    font-size: 24px;
+    padding: 10px 20px; 
+    margin: 8px;
+    border: 2px solid transparent;
+    border-radius: 8px;
+    background-color: transparent;
+    color: var(--setting-text);
+    cursor: pointer;
+    transition: border-color 0.3s, background-color 0.3s; 
+}
+
+button:hover{
+    border-color: var(--button-hover);
+    box-shadow: 0 0 8px var(--button-hover-shadow);
+}
+
+.selected {
+    border-color: var(--selected-border-color);
+    box-shadow: 0 0 10px var(--selected-box-shadow);
+    background-color: var(--selected-bg);
+}
+
+.saveButton {
+    color: var(--save-button-text);
+    border: 2px solid var(--save-button-border);
+    background-color: var(--save-button-bg);
+}
+
+footer {
+    font-size: var(--user-font-size, 0.8em);
+    text-align: center;
+    color: var(--footer);
+}
+
+.poppins-font {
+    font-family: 'Poppins', sans-serif;
+}
+
+.serif-font {
+    font-family: 'DM Serif Display', serif;
+}
+
+.montserrat-font {
+    font-family: 'Montserrat Alternates', sans-serif;
+}
+
+.playwrite-font {
+    font-family: 'Playwrite AU NSW', sans-serif;
+}
+
+.marck-font {
+    font-family: 'Marck Script', cursive;
+}
+
+.pacifico-font {
+    font-family: 'Pacifico', cursive;
+}
+
+.small-size {
+    font-size: 12px;
+}
+
+.medium-size {
+    font-size: 16px;
+}
+
+.large-size {
+    font-size: 20px;
+}
