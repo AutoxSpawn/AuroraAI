@@ -1,0 +1,139 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Poppins";
+  background-image: linear-gradient(
+    to bottom,
+    #5987dc,
+    #5f95e4,
+    #68a3eb,
+    #73b1f1,
+    #80bff7,
+    #94c6fa,
+    #a6cdfc,
+    #b6d5ff,
+    #cbd9ff,
+    #ddddff,
+    #ece3ff,
+    #f8e9ff
+  );
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding-top: 60px;
+}
+
+header {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px;
+  position: fixed;
+  top: 40px;
+  width: 100%;
+  z-index: 10;
+  color: #fff;
+  align-items: center;
+}
+
+header .logo {
+  font-size: 20px;
+  font-weight: bold;
+  padding-left: 60px;
+}
+
+header .logo {
+  font-size: 20px;
+  font-weight: bold;
+  padding-left: 60px;
+}
+
+nav ul {
+  display: flex;
+  list-style-type: none;
+  align-items: center;
+}
+
+nav ul li {
+  margin-right: 60px;
+}
+
+nav ul li a {
+  font-size: 18px;
+  color: #fff;
+  text-decoration: none;
+}
+
+main {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  height: 80vh;
+  padding: 20px;
+  margin-top: 50px;
+}
+
+form {
+  background-color: #ffffff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+label {
+  font-size: 1.1rem;
+  margin-bottom: 8px;
+  display: block;
+  color: #333;
+}
+
+input,
+textarea {
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 20px;
+  border: 2px solid #ccc;
+  border-radius: 4px;
+  font-size: 1rem;
+  box-sizing: border-box;
+}
+
+input:focus,
+textarea:focus {
+  border-color: #5987dc;
+  outline: none;
+  box-shadow: 0 0 5px rgba(89, 135, 220, 0.5);
+}
+
+textarea {
+  resize: vertical;
+  min-height: 150px;
+}
+
+button {
+  background-color: #5987dc;
+  color: white;
+  font-size: 1.1rem;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  width: 100%;
+}
+
+button:hover {
+  background-color: #477db8;
+}
+
+footer {
+  text-align: center;
+  color: #333;
+}

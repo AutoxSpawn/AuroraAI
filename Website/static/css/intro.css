@@ -1,0 +1,139 @@
+body {
+  background-image: linear-gradient(
+    to bottom,
+    #527fbe,
+    #6896cf,
+    #70a4dd,
+    #78b1ea,
+    #80bff7
+  );
+  color: white;
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  position: relative;
+  margin: 0;
+  padding: 20px;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+/* Logo and framing */
+.logo-container {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  width: 100vw;
+}
+
+.logo {
+  margin-left: 15px;
+}
+
+.logo,
+.logoframe,
+.enter-button,
+.footer {
+  position: absolute;
+  height: auto;
+}
+
+.enter-button {
+  position: absolute;
+  bottom: 27%;
+  left: 50%;
+  transform: translateX(-50%);
+  cursor: pointer;
+  transition: opacity 0.5s;
+}
+
+.enter-button:hover {
+  content: url("../images/enterrr.png");
+}
+
+.border {
+  margin-left: 40px;
+}
+
+/* Rotating dots */
+.rotating-dots {
+  position: absolute;
+  width: min(50vw, 250px);
+  height: min(50vw, 250px);
+  border-radius: 50%;
+  border: 4px dotted white;
+  animation: rotate 35s linear infinite;
+  z-index: 1;
+}
+
+@keyframes rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Sparkle Effect */
+.star-container {
+  position: fixed;
+  width: 100%;
+  height: 90%;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.star {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  background: white;
+  border-radius: 50%;
+  opacity: 0;
+  animation: twinkle 5s infinite ease-in-out;
+}
+
+.star.large {
+  width: 8px;
+  height: 8px;
+  opacity: 0.8;
+}
+
+.star.blurry {
+  filter: blur(2px);
+}
+
+@keyframes twinkle {
+  0%,
+  100% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+/* Import Butler font */
+@font-face {
+  font-family: "Butler";
+  src: url("../fonts/Butler_Medium.otf") format("opentype");
+  font-weight: normal;
+  font-style: normal;
+}
+
+.footer {
+  bottom: 1.25%;
+  width: auto;
+  left: 50%;
+  transform: translateX(-50%);
+  text-align: center;
+  font-family: "Butler", serif;
+  color: white;
+  opacity: 0.8;
+}

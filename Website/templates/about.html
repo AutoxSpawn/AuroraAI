@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>About AuroraAI</title>
+    <link
+      rel="shortcut icon"
+      href="{{ url_for('static', filename='images/favicon.ico')}}"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/aboutstyles.css') }}"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/homestyle.css') }}"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/chat.css') }}"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Koh+Santepheap:wght@100;300;400;700;900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Solway:wght@300;400;500;700;800&family=Zain:ital,wght@0,200;0,300;0,400;0,700;0,800;0,900;1,300;1,400&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <header>
+      <div class="AuroraText">Aurora AI</div>
+      <nav>
+        <ul>
+          <li><a href="{{ url_for('home') }}">Home</a></li>
+          <li><a href="{{ url_for('about') }}">About</a></li>
+        </ul>
+      </nav>
+    </header>
+
+    <!-- About section -->
+    <main class="about">
+      <div class="about-container">
+        <div class="about-text">
+          <h1>About Us</h1>
+          <p>
+            AuroraAI is an emotional chatbot designed to support and accompany
+            users. It engages in meaningful conversations, providing
+            companionship and understanding. With features like Text-To-Speech,
+            AuroraAI creates a more personal experience, making it feel as if
+            the chatbot is right there with you.
+          </p>
+          <a href="../templates/contact.html" class="contact-button">Contact</a>
+        </div>
+        <div class="mascot-float">
+          <img
+            src="../static/images/float.png"
+            alt="Floating Mascot"
+            class="float-chibi"
+          />
+        </div>
+      </div>
+
+      <!-- Meet the Team section -->
+      <div class="team">
+        <h2>Meet the Team</h2>
+        <div class="team-container">
+          <div class="team-member">
+            <h3>Steven Chiu</h3>
+            <p>Backend Developer</p>
+          </div>
+          <div class="team-member">
+            <h3>Man Leung</h3>
+            <p>Fullstack Developer</p>
+          </div>
+          <div class="team-member">
+            <h3>Candy Chan</h3>
+            <p>Frontend Developer</p>
+          </div>
+          <div class="team-member">
+            <h3>Edison</h3>
+            <p>Fullstack Developer</p>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <footer>
+      <p>2024-2025 Group 5 | Drexel University</p>
+    </footer>
+
+    <!-- Star Animation -->
+    <div class="star-container"></div>
+
+    <!-- JavaScript for Sparkle Effect -->
+    <script>
+      function createStars() {
+        const container = document.querySelector(".star-container");
+
+        for (let i = 0; i < 80; i++) {
+          // Adjust for more/less stars
+          let star = document.createElement("div");
+          star.classList.add("star");
+
+          // Randomize size & blur
+          if (Math.random() > 0.7) {
+            star.classList.add("large");
+          }
+          if (Math.random() > 0.5) {
+            star.classList.add("blurry");
+          }
+
+          // Random positions
+          star.style.left = `${Math.random() * 100}vw`;
+          star.style.top = `${Math.random() * 100}vh`;
+
+          // Random twinkle duration
+          star.style.animationDuration = `${Math.random() * 3 + 2}s`;
+
+          container.appendChild(star);
+        }
+      }
+
+      createStars(); // Generate stars when page loads
+    </script>
+  </body>
+</html>
