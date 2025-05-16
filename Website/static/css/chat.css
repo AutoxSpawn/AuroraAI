@@ -49,7 +49,7 @@
 }
 
 .user-message {
-  background-color: #e6f0ff; /* or another matching color */
+  background-color: var(--user-chatbox-bg); 
   padding: 8px 12px;
   border-radius: 15px 15px 15px 0;
   max-width: 60%;
@@ -58,7 +58,7 @@
 }
 
 .ai-message {
-  background-color: #fcedf1;
+  background-color: var(--ai-chatbox-bg);
   padding: 8px 12px;
   border-radius: 15px 15px 0 15px;
   max-width: 60%;
@@ -92,7 +92,7 @@
   display: flex;
   align-items: center;
   padding: 10px;
-  border-top: 1px solid #ffffff;
+  border-top: 1px solid var(--border-line);
 }
 
 .message-input {
@@ -101,32 +101,24 @@
   outline: none;
   padding: 5px;
   font-size: 14px;
+  background-color: var(--message-input-bg);
+  color: var(--message-input-text);
 }
 
-.send-button {
+.send-button,
+.record-button
+{
   border: none;
-  background-color: #83aeff;
-  color: #fff;
+  background-color: var(--bg-chat-button);
+  color: var(--text-primary);
   font-size: 14px;
   padding: 5px 10px;
   cursor: pointer;
 }
 
-.send-button:hover {
-  background-color: #6292ec;
-}
-
-.record-button {
-  border: none;
-  background-color: #83aeff;
-  color: #fff;
-  font-size: 14px;
-  padding: 5px 10px;
-  cursor: pointer;
-}
-
+.send-button:hover,
 .record-button:hover {
-  background-color: #6292ec;
+  background-color: var(--bg-button-hover);
 }
 
 /* Aurora typing animation - Steven */
@@ -175,7 +167,7 @@
   font-size: 14px;
   font-weight: bold;
   font-style: italic;
-  color: #ffffff;
+  color: var(--typing-indicator);
   text-align: center;
   margin-top: 20px;
   animation: typingDots 2s infinite ease-in-out;
@@ -205,20 +197,20 @@
   top: 30%;
   left: 20%;
   transform: translateX(-50%);
-  background: linear-gradient(135deg, #a3d5ff, #d6f0ff);
+  background: var(--game-catalog-bg);
   border-radius: 12px;
   padding: 30px;
   width: 80%;
   max-width: 500px;
-  box-shadow: 0 0 20px rgba(100, 200, 255, 0.4);
+  box-shadow: 0 0 20px var(--game-catalog-shadow);
   z-index: 20;
   text-align: center;
-  color: white;
+  color: var(--text-primary);
   display: none;
 }
 
 .game-catalog h2 {
-  color: white;
+  color: var(--text-primary);
 }
 
 .game-list {
@@ -234,17 +226,17 @@
   margin-bottom: 12px;
   font-size: 18px;
   font-weight: bold;
-  background-color: white;
+  background-color: var(--game-name-bg);
   padding: 12px;
   border-radius: 8px;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
   cursor: pointer;
-  color: #003d66;
+  color: var(--game-name);
 }
 
 .game-list li:hover {
   transform: scale(1.03);
-  box-shadow: 0 4px 12px rgba(0, 102, 153, 0.2);
+  box-shadow: 0 4px 12px var(--game-name-shadow);
 }
 
 .button-wrapper {
@@ -258,15 +250,15 @@
 .game-button {
   padding: 10px 20px;
   font-size: 14px;
-  background-color: #4e8cff;
-  color: white;
+  background-color: var(--game-button);
+  color: var(--text-primary);
   border: none;
   border-radius: 5px;
   cursor: pointer;
 }
 
 .game-button:hover {
-  background-color: #3a6cd9;
+  background-color: var(--game-button-hover);
 }
 
 .game-button-top-left {
@@ -274,8 +266,8 @@
   top: 30px;
   left: 30px;
   z-index: 25;
-  background-color: #83aeff;
-  color: white;
+  background-color: var(--game-button);
+  color: var(--text-primary);
   font-size: 14px;
   font-weight: 600;
   padding: 10px 18px;
@@ -287,10 +279,12 @@
 }
 
 .game-button-top-left:hover {
-  background-color: #83aeff;
+  background-color: var(--game-button-hover);
   transform: scale(1.05);
   box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
 }
+
+/*Have not change any color start from here  */
 
 .back-button {
   background-color: #e6f3ff; /* soft light blue */
