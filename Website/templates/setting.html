@@ -57,12 +57,14 @@
         <button type="button" class="large-size">Large</button>
       </div>
 
-      <!-- Avatar Style -->
-      <div class="avatarGp">
-        <p class="group-title">Avatar</p>
-        <button type="button" class="avatar-option aurora">Aurora</button>
-        <button type="button" class="avatar-option chibi">Chibi</button>
-        <button type="button" class="avatar-option dog">Dog</button>
+      <!-- Theme  Style -->
+      <div class="themeGp">
+        <p class="group-title">Color</p>
+        <button type="button" class="sky-theme">Sky</button>
+        <button type="button" class="violet-theme">Violet</button>
+        <button type="button" class="matcha-theme">Matcha</button>
+        <button type="button" class="peach-theme">Peach</button>
+        <button type="button" class="rose-theme">Rose</button>
       </div>
 
       <!-- Save Button -->
@@ -76,109 +78,106 @@
   </footer>
 
   <script>
-    document.addEventListener('DOMContentLoaded', function() {
-  // Apply saved settings on load
-  applySavedSettings();
-  
-  // Setup button groups
-  setupButtonGroups();
-});
+    document.addEventListener('DOMContentLoaded', function () {
+      applySavedSettings();
+      setupButtonGroups();
+    });
 
-function applySavedSettings() {
-  // Font family
-  const savedFont = localStorage.getItem('selectedFontClass');
-  if (savedFont) {
-    document.documentElement.className = document.documentElement.className
-      .replace(/\bfont-\S+/g, '') // Remove all existing font classes
-      .replace(/\blight-theme\b/, 'light-theme') // Keep theme class
-      .replace(/\bsize-\S+/g, ''); // Remove size classes (handled below)
-    document.documentElement.classList.add(savedFont);
-    
-    // Set matching button as selected
-    const fontButtons = document.querySelectorAll('.fontButtonGp button');
-    fontButtons.forEach(btn => {
-      if (btn.classList.contains(savedFont.replace('font-', '') + '-font')) {
-        btn.classList.add('selected');
+    const settingsConfig = {
+      fontFamily: {
+        classes: {
+          "Poppins": "font-poppins",
+          "DM Serif Display": "font-serif",
+          "Montserrat Alternates": "font-montserrat",
+          "Playwrite Australia NSW": "font-playwrite",
+          "Marck Script": "font-marck",
+          "Pacifico": "font-pacifico"
+        },
+        selector: '.fontButtonGp button',
+        storageKey: 'selectedFontClass'
+      },
+      fontSize: {
+        classes: {
+          "Small": "size-small",
+          "Medium": "size-medium",
+          "Large": "size-large"
+        },
+        selector: '.fontSizeGp button',
+        storageKey: 'selectedFontSize'
+      },
+      theme: {
+        classes: {
+          "Sky": "sky-theme",
+          "Violet": "violet-theme",
+          "Matcha": "matcha-theme",
+          "Peach": "peach-theme",
+          "Rose": "rose-theme"
+        },
+        selector: '.themeGp button',
+        storageKey: 'selectedTheme'
       }
-    });
-  }
-
-  // Font size
-  const savedSize = localStorage.getItem('selectedFontSize');
-  if (savedSize) {
-    document.documentElement.classList.remove('size-small', 'size-medium', 'size-large');
-    document.documentElement.classList.add(`size-${savedSize}`);
-    
-    // Set matching button as selected
-    const sizeBtn = document.querySelector(`.${savedSize}-size`);
-    if (sizeBtn) sizeBtn.classList.add('selected');
-  }
-}
-
-function setupButtonGroups() {
-  function setupGroup(groupSelector) {
-    const group = document.querySelector(groupSelector);
-    const buttons = group.querySelectorAll('button');
-
-    buttons.forEach(button => {
-      button.addEventListener('click', function() {
-        buttons.forEach(btn => btn.classList.remove('selected'));
-        this.classList.add('selected');
-      });
-    });
-  }
-
-  setupGroup('.fontButtonGp');
-  setupGroup('.fontSizeGp');
-  setupGroup('.avatarGp');
-}
-
-function saveSettings() {
-  const selectedFont = document.querySelector('.fontButtonGp .selected');
-  const selectedSize = document.querySelector('.fontSizeGp .selected');
-
-  if (selectedFont) {
-    const fontClassMap = {
-      "Poppins": "font-poppins",
-      "DM Serif Display": "font-serif",
-      "Montserrat Alternates": "font-montserrat",
-      "Playwrite Australia NSW": "font-playwrite",
-      "Marck Script": "font-marck",
-      "Pacifico": "font-pacifico"
     };
 
-    const fontName = selectedFont.textContent.trim();
-    const fontClass = fontClassMap[fontName];
-
-    if (fontClass) {
-      // Remove all font classes first
-      document.documentElement.className = document.documentElement.className
-        .replace(/\bfont-\S+/g, '')
-        .replace(/\blight-theme\b/, 'light-theme')
-        .replace(/\bsize-\S+/g, '');
-      
-      document.documentElement.classList.add(fontClass);
-      localStorage.setItem('selectedFontClass', fontClass);
+    function updateHtmlClass(theme, size, font) {
+      document.documentElement.className = `${theme} ${size} ${font}`;
     }
-  }
 
-  if (selectedSize) {
-    let sizeClass;
-    if (selectedSize.classList.contains('small-size')) {
-      sizeClass = 'small';
-    } else if (selectedSize.classList.contains('medium-size')) {
-      sizeClass = 'medium';
-    } else if (selectedSize.classList.contains('large-size')) {
-      sizeClass = 'large';
+    function saveSettings() {
+      let newTheme = "sky-theme";
+      let newSize = "size-medium";
+      let newFont = "font-poppins";
+
+      Object.entries(settingsConfig).forEach(([key, config]) => {
+        const selectedBtn = document.querySelector(`${config.selector}.selected`);
+        if (!selectedBtn) return;
+
+        const label = selectedBtn.textContent.trim();
+        const selectedClass = config.classes[label];
+        if (!selectedClass)return;
+
+        localStorage.setItem(config.storageKey, selectedClass);
+
+        if (key === 'theme') newTheme = selectedClass;
+        if (key === 'fontSize') newSize = selectedClass;
+        if (key === 'fontFamily') newFont = selectedClass;
+      });
+
+      updateHtmlClass(newTheme, newSize, newFont);
+      alert("Settings Saved!");
     }
-    
-    document.documentElement.classList.remove('size-small', 'size-medium', 'size-large');
-    document.documentElement.classList.add(`size-${sizeClass}`);
-    localStorage.setItem('selectedFontSize', sizeClass);
-  }
 
-  alert("Settings Saved!");
-}
+    function applySavedSettings() {
+      const theme = localStorage.getItem(settingsConfig.theme.storageKey) || "sky-theme";
+      const size = localStorage.getItem(settingsConfig.fontSize.storageKey) || "size-medium";
+      const font = localStorage.getItem(settingsConfig.fontFamily.storageKey) || "font-poppins";
+
+      updateHtmlClass(theme, size, font);
+      Object.values(settingsConfig).forEach(config => {
+        const savedClass = localStorage.getItem(config.storageKey);
+        if (!savedClass) return;
+
+        const buttons = document.querySelectorAll(config.selector);
+        buttons.forEach(btn => {
+          btn.classList.remove('selected');
+          const label = btn.textContent.trim();
+          if (config.classes[label] === savedClass) {
+            btn.classList.add('selected');
+          }
+        });
+      });
+    }
+
+    function setupButtonGroups() {
+      Object.values(settingsConfig).forEach(config => {
+        const buttons = document.querySelectorAll(config.selector);
+        buttons.forEach(button => {
+          button.addEventListener('click', function () {
+            buttons.forEach(btn => btn.classList.remove('selected'));
+            this.classList.add('selected');
+          });
+        });
+      });
+    }
   </script>
 </body>
 </html>
