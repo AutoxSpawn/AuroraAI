@@ -1,6 +1,7 @@
 <!DOCTYPE html>
-<html lang="en">
-  <head>
+<html lang="en" class="light-theme">
+<head>
+
   <script>
     document.addEventListener('DOMContentLoaded', function() {
       const html = document.documentElement;
@@ -8,86 +9,74 @@
       html.className = `${theme}`;
     });
   </script>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <meta charset="UTF-8">
+    <link rel="shortcut icon" href="{{ url_for('static', filename='images/favicon.ico')}}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Aurora</title>
-    <link
-      rel="stylesheet"
-      href="{{ url_for('static', filename='css/intro.css') }}"
-    />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/intro.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/dynamicStyles.css') }}">
-  </head>
-  <body>
+</head>
+<body>
     <!-- Aurora Logo -->
     <div class="logo-container">
-      <img
-        src="{{ url_for('static', filename='images/logo.png') }}"
-        alt="Aurora Logo"
-        class="logo"
-      />
-      <img
-        src="{{ url_for('static', filename='images/logoframe.png') }}"
-        alt="Aurora Logo Frame"
-        class="logoframe"
-      />
-      <img
-        src="{{ url_for('static', filename='images/border.png') }}"
-        alt="Border"
-        class="border"
-      />
-
-      <!-- Using anchor tag instead of JavaScript onclick -->
-      <a href="{{ url_for('home') }}">
-        <img
-          src="{{ url_for('static', filename='images/enter.png') }}"
-          alt="Enter"
-          class="enter-button"
-        />
-      </a>
-
-      <!-- Footer -->
-      <footer class="footer">
+        <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Aurora Logo" class="logo">
+        <img src="{{ url_for('static', filename='images/logoframe.png') }}" alt="Aurora Logo Frame" class="logoframe">
+        <img src="{{ url_for('static', filename='images/border.png') }}" alt="Border" class="border">
+        <!--uses onclick for navigation | <a href></a> could not be used as Enter button would disappear -->
+        <img src="{{ url_for('static', filename='images/enter.png') }}" 
+             alt="button" 
+             class="enter-button" 
+             style="cursor: pointer;"
+             onclick="window.location.href='{{ url_for('home') }}';" >
+        <!-- Footer -->
+        <footer class="footer">
         <p>Made with (ﾉ◕ヮ◕)ﾉ*:･ﾟ✧ | Group 5</p>
-      </footer>
+        </footer>
     </div>
 
-    <!-- Rotating dot behind Logo -->
+    <!-- Rotating dot behind Logo-->
     <div class="rotating-dots"></div>
 
-    <!-- Pretty stars <3 -->
+    <!-- pretty stars <3 -->
     <div class="star-container"></div>
-
-    <!-- JavaScript for sparkle animation -->
+    <!-- Javascript for sparkle animation-->
     <script>
-      function createStars() {
-        const container = document.querySelector(".star-container");
-        if (!container) {
-          console.error("Error: .star-container not found.");
-          return; // Prevents script from running if the element doesn't exist
+        function createStars() {
+            const container = document.querySelector('.star-container');
+
+            for (let i = 0; i < 80; i++) { // Adjust for more/less stars
+                let star = document.createElement('div');
+                star.classList.add('star');
+
+                // Randomize size & blur
+                if (Math.random() > 0.7) {
+                    star.classList.add('large');
+                }
+                if (Math.random() > 0.5) {
+                    star.classList.add('blurry');
+                }
+
+                // Random positions
+                star.style.left = `${Math.random() * 100}vw`;
+                star.style.top = `${Math.random() * 100}vh`;
+
+                // Random twinkle duration
+                star.style.animationDuration = `${Math.random() * 3 + 2}s`;
+
+                container.appendChild(star);
+            }
         }
 
-        for (let i = 0; i < 80; i++) {
-          // Adjust for more/less stars
-          let star = document.createElement("div");
-          star.classList.add("star");
+        createStars(); // Generate stars when page loads
 
-          // Randomize size & blur
-          if (Math.random() > 0.7) star.classList.add("large");
-          if (Math.random() > 0.5) star.classList.add("blurry");
-
-          // Random positions
-          star.style.left = `${Math.random() * 100}vw`;
-          star.style.top = `${Math.random() * 100}vh`;
-
-          // Random twinkle duration
-          star.style.animationDuration = `${Math.random() * 3 + 2}s`;
-
-          container.appendChild(star);
-        }
-      }
-
-      // Run the function when the page loads
-      document.addEventListener("DOMContentLoaded", createStars);
+        //change theme (background color)
+        window.addEventListener('storage', function(event) {
+            if (event.key === 'theme') {
+                document.documentElement.className = event.newValue + '-theme';
+            }
+        });
     </script>
-  </body>
+
+</body>
 </html>

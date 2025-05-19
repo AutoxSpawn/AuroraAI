@@ -5,13 +5,13 @@
     document.addEventListener('DOMContentLoaded', function() {
       const html = document.documentElement;
       
-      const theme = localStorage.getItem('currentTheme') || (localStorage.getItem('selecedLightTheme')|| "sky-theme");
+      const theme = localStorage.getItem('selectedTheme') || (localStorage.getItem('selectedLightTheme')|| "sky-theme");
       const size = localStorage.getItem('selectedFontSize') || "size-medium";
       const font = localStorage.getItem('selectedFontClass') || "font-poppins";
       
       html.className = `${theme} ${size} ${font}`;
     });
-  </script>   
+  </script>      
   
   <meta charset="UTF-8">
   <title>Settings</title>
