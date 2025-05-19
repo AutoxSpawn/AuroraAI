@@ -40,8 +40,9 @@
     --user-font-family: 'Pacifico', cursive;
 }
 
-/* normal light theme */
-:root.normal-theme {
+/* All Light mode theme */
+/* sky theme (blue light) */
+:root.sky-theme {
     /* overall */
     --bg-gradient: linear-gradient(to bottom,#5987dc, #5f95e4, #68a3eb, #73b1f1, #80bff7, #94c6fa, #a6cdfc, #b6d5ff, #cbd9ff, #ddddff, #ece3ff, #f8e9ff); /*page background*/ 
     --header: #ffffff; /*header*/ 
@@ -113,77 +114,7 @@
     --save-button-bg: #6BA5EB;
 }
 
-/* normal dark theme */
-:root.dark-theme {
-    /* overall */
-    --bg-gradient: linear-gradient(to right top, #1a364e, #19344b, #193148, #182f46, #172d43, #21314a, #2b3450, #363755, #514062, #6e486a, #89516e, #a35c6e);
-    --header: #fff ; /*header*/ 
-    --footer: #a35c6e; /*footer*/
-    --text-primary: #fff ; /*text color*/
-
-    /* chat section */
-    --bg-chat-button: #41729f; /*chat send/record button*/ 
-    --bg-button-hover: #5885af; /*chat send/record button hover*/ 
-    --user-chatbox-bg: #7B98CC; /*user chat message background*/ 
-    --ai-chatbox-bg: #F5DDE1 ; /*ai chat message background*/ 
-    --border-line: #fff ; /*chat border spreate line*/ 
-    --message-input-bg: #dadaf0; /*chat input bar background color*/ 
-    --message-input-text: black ; /*chat input bar text color*/ 
-    --typing-indicator: #BCBCD2 ; /*typing indicator*/  
-
-    /* game section */
-    --game-catalog-bg: #2F3552 ; /*game catalog background*/ 
-    --game-catalog-shadow: rgba(124, 137, 180, 0.4); /*game catalog shadow*/ 
-    --game-name-bg: #4F3F61 ; /*game name background*/ 
-    --game-name: #fff ; /*game name text*/ 
-    --game-name-shadow: rgba(0, 102, 153, 0.2) ; /*game name box shadow*/ 
-    --game-button: #4F3F61 ; /*game top left button*/ 
-    --game-button-hover: #554b61; /*game tp left button hover*/ 
-
-    /* drop down menu */
-    --drop-menu-bg: #2F3552 ; /*drop down menu background*/ 
-    --drop-menu-shadow: rgba(0, 0, 0, 0.2); ; /*drop down menu shadow*/
-    --switcher-bg: #4F3F61 ; /*switcher background*/
-    --switcher-slider: #5a4a6d ; /*drop down menu switcher slider*/ 
-    --drop-menu-divider: #5d526b ; /*drop down divider*/
-    --drop-menu-text: #fff ;
-
-    /* about page */
-    --about-title: #fff ; /*about page title*/ 
-    --about-body: #BCBCD2 ; /*about page body*/ 
-    --contact-button: #AC8C9C ; /*about page contact button*/
-    --contact-button-text: #2f2233 ;
-    --contact-button-hover:#2f2233;
-    --contact-button-text-hover: #AC8C9C; 
-    --team-member-box-bg:#ac8fac;
-    --team-member-box-shadow: rgb(241, 236, 243, 0.2);
-    --team-member-name: #2f2233;
-    --team-member-text: #2f2233;
-
-    /* contact page */
-    --contact-form-bg: #2F3552 ; /*contact form background*/
-    --contact-form-shadow: rgba(124, 137, 180, 0.4); /*contact form box shadow*/
-    --contact-form-label: #7B98CC ; /*contact label*/
-    --contact-textarea: #BCBCD2 ; /*contatc textarea*/
-    --focus-border: #7B98CC ; /*textarea focus border*/
-    --focus-glow: rgba(111, 80, 153, 0.5) ; /*textarea focus glow*/
-    --submit-button-bg: #4F3F61 ; /*submit button background*/
-    --submit-button: #fff ; /*submit button label color*/
-    --submit-button-hover: #554b61 ; /*submit button hover*/
-
-    /* setting page */
-    --setting-text: #e9abb1 ;
-    --button-hoven: #9C849C;
-    --button-hover-shadow: #9C849C;
-    --selected-border-color: #9C849C;
-    --selected-box-shadow: #9C849C;
-    --selected-bg: rgba(255, 255, 255, 0.1);
-    --save-button-border: #9C849C;
-    --save-button-bg: #9C849C;
-    --save-button-text:#5F4465;
-}
-
-/* orange pink theme */
+/* peach theme (orange pink)*/
 :root.peach-theme {
     /* overall */
     --bg-gradient: radial-gradient(circle, #eedce0, #f0d7db, #f2d1d5, #f4ccce, #f6c7c7, #f5bdbb, #f3b2ae, #f0a8a0, #e9958b, #e28277, #d96f63, #d05c4f);
@@ -253,7 +184,7 @@
     --save-button-text: #ffe5de;
 }
 
-/* purple blue theme */
+/* violet theme (purple blue)*/
 :root.violet-theme {
     /* overall */
     --bg-gradient: linear-gradient(to right bottom, #f2d6e9, #e7cae2, #dcbedc, #cfb3d6, #c1a8d1, #b9a9d5, #b0abd8, #a7acda, #a4b9e3, #a5c6e9, #a9d2ee, #b1def1);
@@ -325,7 +256,7 @@
     --save-button-text: #4a469c;
 }
 
-/* strawberry matcha theme */
+/* matcha theme (green pink)*/
 :root.matcha-theme {
     /* overall */
     --bg-gradient: linear-gradient(to right bottom, #436741, #657c57, #869270, #a5a98b, #c3c1a9, #d0c9b4, #ddd1c0, #e8dacc, #e8d3c8, #e7cdc6, #e5c7c5, #e1c1c6);
@@ -395,7 +326,7 @@
     --save-button-text: #452815;
 }
 
-/* pink dried rose theme */
+/* rose theme (pink)*/
 :root.rose-theme {
     /* overall */
     --bg-gradient:linear-gradient(to left top, #d6898e, #dd99a0, #e2aab1, #e8bac2, #edcbd2, #e9c8cf, #e4c5cd, #e0c2ca, #d1abb6, #c294a2, #b37e8f, #a4687c) ;
@@ -465,71 +396,143 @@
     --save-button-text: #660621 ;
 }
 
-:root.light-theme {
+/* All dark mode theme */
+/* space dark theme (pink dark)*/
+:root.space-theme {
     /* overall */
-    --bg-gradient:linear-gradient(to left top, #245581, #2b466e, #2d385b, #2b2a48, #251e36, #271c36, #281b35, #2a1934, #362044, #422855, #4e3067, #5a397a);
+    --bg-gradient: linear-gradient(to right top, #1a364e, #19344b, #193148, #182f46, #172d43, #21314a, #2b3450, #363755, #514062, #6e486a, #89516e, #a35c6e);
     --header: #fff ; /*header*/ 
-    --footer: ; /*footer*/
+    --footer: #a35c6e; /*footer*/
     --text-primary: #fff ; /*text color*/
 
     /* chat section */
-    --bg-chat-button: ; /*chat send/record button*/ 
-    --bg-button-hover: ; /*chat send/record button hover*/ 
-    --user-chatbox-bg: ; /*user chat message background*/ 
-    --ai-chatbox-bg: ; /*ai chat message background*/ 
-    --border-line: ; /*chat border spreate line*/ 
-    --message-input-bg: ; /*chat input bar background color*/ 
-    --message-input-text:  ; /*chat input bar text color*/ 
-    --typing-indicator: ; /*typing indicator*/  
+    --bg-chat-button: #41729f; /*chat send/record button*/ 
+    --bg-button-hover: #5885af; /*chat send/record button hover*/ 
+    --user-chatbox-bg: #7B98CC; /*user chat message background*/ 
+    --ai-chatbox-bg: #F5DDE1 ; /*ai chat message background*/ 
+    --border-line: #fff ; /*chat border spreate line*/ 
+    --message-input-bg: #dadaf0; /*chat input bar background color*/ 
+    --message-input-text: black ; /*chat input bar text color*/ 
+    --typing-indicator: #BCBCD2 ; /*typing indicator*/  
 
     /* game section */
-    --game-catalog-bg: ; /*game catalog background*/ 
-    --game-catalog-shadow: ; /*game catalog shadow*/ 
-    --game-name-bg: ; /*game name background*/ 
-    --game-name: ; /*game name text*/ 
-    --game-name-shadow:  ; /*game name box shadow*/ 
-    --game-button:  ; /*game top left button*/ 
-    --game-button-hover: ; /*game tp left button hover*/ 
+    --game-catalog-bg: #2F3552 ; /*game catalog background*/ 
+    --game-catalog-shadow: rgba(124, 137, 180, 0.4); /*game catalog shadow*/ 
+    --game-name-bg: #4F3F61 ; /*game name background*/ 
+    --game-name: #fff ; /*game name text*/ 
+    --game-name-shadow: rgba(0, 102, 153, 0.2) ; /*game name box shadow*/ 
+    --game-button: #4F3F61 ; /*game top left button*/ 
+    --game-button-hover: #554b61; /*game tp left button hover*/ 
 
     /* drop down menu */
-    --drop-menu-bg:  ; /*drop down menu background*/ 
-    --drop-menu-shadow:  ; /*drop down menu shadow*/
-    --switcher-bg: ; /*switcher background*/
-    --switcher-slider:  ; /*drop down menu switcher slider*/ 
-    --drop-menu-divider:  ; /*drop down divider*/
-    --drop-menu-text: ;
+    --drop-menu-bg: #2F3552 ; /*drop down menu background*/ 
+    --drop-menu-shadow: rgba(0, 0, 0, 0.2); ; /*drop down menu shadow*/
+    --switcher-bg: #4F3F61 ; /*switcher background*/
+    --switcher-slider: #5a4a6d ; /*drop down menu switcher slider*/ 
+    --drop-menu-divider: #5d526b ; /*drop down divider*/
+    --drop-menu-text: #fff ;
 
     /* about page */
-    --about-title:  ; /*about page title*/ 
-    --about-body:  ; /*about page body*/ 
-    --contact-button:  ; /*about page contact button*/
-    --contact-button-text: ;
-    --contact-button-hover: ;
-    --contact-button-text-hover: ; 
-    --team-member-box-bg: ;
-    --team-member-box-shadow: ;
-    --team-member-name: ;
-    --team-member-text: ;
+    --about-title: #fff ; /*about page title*/ 
+    --about-body: #BCBCD2 ; /*about page body*/ 
+    --contact-button: #AC8C9C ; /*about page contact button*/
+    --contact-button-text: #2f2233 ;
+    --contact-button-hover:#2f2233;
+    --contact-button-text-hover: #AC8C9C; 
+    --team-member-box-bg:#ac8fac;
+    --team-member-box-shadow: rgb(241, 236, 243, 0.2);
+    --team-member-name: #2f2233;
+    --team-member-text: #2f2233;
 
     /* contact page */
-    --contact-form-bg: ; /*contact form background*/
-    --contact-form-shadow: ; /*contact form box shadow*/
-    --contact-form-label: ; /*contact label*/
-    --contact-textarea: ; /*contatc textarea*/
-    --focus-border: ; /*textarea focus border*/
-    --focus-glow: ; /*textarea focus glow*/
-    --submit-button-bg:  ; /*submit button background*/
-    --submit-button: ; /*submit button label color*/
-    --submit-button-hover: ; /*submit button hover*/
+    --contact-form-bg: #2F3552 ; /*contact form background*/
+    --contact-form-shadow: rgba(124, 137, 180, 0.4); /*contact form box shadow*/
+    --contact-form-label: #7B98CC ; /*contact label*/
+    --contact-textarea: #BCBCD2 ; /*contatc textarea*/
+    --focus-border: #7B98CC ; /*textarea focus border*/
+    --focus-glow: rgba(111, 80, 153, 0.5) ; /*textarea focus glow*/
+    --submit-button-bg: #4F3F61 ; /*submit button background*/
+    --submit-button: #fff ; /*submit button label color*/
+    --submit-button-hover: #554b61 ; /*submit button hover*/
 
     /* setting page */
-    --setting-text: ;
-    --button-hoven: ;
-    --button-hover-shadow: ;
-    --selected-border-color: ;
-    --selected-box-shadow: ;
-    --selected-bg: ;
-    --save-button-border: ;
-    --save-button-bg: ;
-    --save-button-text: ;
+    --setting-text: #e9abb1 ;
+    --button-hoven: #9C849C;
+    --button-hover-shadow: #9C849C;
+    --selected-border-color: #9C849C;
+    --selected-box-shadow: #9C849C;
+    --selected-bg: rgba(255, 255, 255, 0.1);
+    --save-button-border: #9C849C;
+    --save-button-bg: #9C849C;
+    --save-button-text:#5F4465;
+}
+
+/* sea theme */
+:root.sea-theme {
+    /* overall */
+    --bg-gradient: linear-gradient(to right bottom, #11295c, #0d2352, #081d49, #04173f, #021136, #011d43, #002950, #00365d, #005c83, #0084a3, #0faebd, #53d8d0);
+    --header: #d2dbeb; /*header*/ 
+    --footer: #d2dbeb; /*footer*/
+    --text-primary: #d2dbeb ; /*text color*/
+
+    /* chat section */
+    --bg-chat-button: #0e2038; /*chat send/record button*/ 
+    --bg-button-hover: #213a5c; /*chat send/record button hover*/ 
+    --user-chatbox-bg: #4e6896; /*user chat message background*/ 
+    --ai-chatbox-bg: #6e94cf ; /*ai chat message background*/ 
+    --border-line: #d2dbeb; /*chat border spreate line*/ 
+    --message-input-bg: #d2dbeb; /*chat input bar background color*/ 
+    --message-input-text:  #0c141a; /*chat input bar text color*/ 
+    --typing-indicator: #a7c1ca; /*typing indicator*/  
+
+    /* game section */
+    --game-catalog-bg: #28487b ; /*game catalog background*/ 
+    --game-catalog-shadow: rgb(241, 236, 243, 0.2); /*game catalog shadow*/ 
+    --game-name-bg: #4468a6 ; /*game name background*/ 
+    --game-name: #d2dbeb ; /*game name text*/ 
+    --game-name-shadow: rgb(241, 236, 243, 0.2); /*game name box shadow*/ 
+    --game-button: #6a90b4 ; /*game top left button*/ 
+    --game-button-hover: #b9cdee; /*game tp left button hover*/ 
+
+    /* drop down menu */
+    --drop-menu-bg: #6a90b4 ; /*drop down menu background*/ 
+    --drop-menu-shadow: rgb(241, 236, 243, 0.2); /*drop down menu shadow*/
+    --switcher-bg: #00385a; /*switcher background*/
+    --switcher-slider:  #94a2bf63; /*drop down menu switcher slider*/ 
+    --drop-menu-divider: #020202 ; /*drop down divider*/
+    --drop-menu-text: #d2dbeb ;
+
+    /* about page */
+    --about-title:  #d2dbeb; /*about page title*/ 
+    --about-body:  #d2dbeb; /*about page body*/ 
+    --contact-button:  #d3bac5; /*about page contact button*/
+    --contact-button-text: #143887;
+    --contact-button-hover: #143887;
+    --contact-button-text-hover: #d3bac5; 
+    --team-member-box-bg: #d3bac5;
+    --team-member-box-shadow: rgb(241, 236, 243, 0.2);
+    --team-member-name: #000;
+    --team-member-text:#000;
+
+    /* contact page */
+    --contact-form-bg: #15316d; /*contact form background*/
+    --contact-form-shadow:rgba(124, 137, 180, 0.4); /*contact form box shadow*/
+    --contact-form-label: #d2dbeb ; /*contact label*/
+    --contact-textarea: #c5cdff ; /*contatc textarea*/
+    --focus-border: #c5cdff; /*textarea focus border*/
+    --focus-glow: rgba(124, 137, 180, 0.4); /*textarea focus glow*/
+    --submit-button-bg: #717ed8; /*submit button background*/
+    --submit-button: #d2dbeb; /*submit button label color*/
+    --submit-button-hover: #475aaf; /*submit button hover*/
+
+    /* setting page */
+    --setting-text: #d2dbeb ;
+    --button-hoven: #475aaf;
+    --button-hover-shadow: rgba(124, 137, 180, 0.4);
+    --selected-border-color: #e8eeff;
+    --selected-box-shadow:rgba(124, 137, 180, 0.3);
+    --selected-bg: #c5cdff77;
+    --save-button-border: #7fade0;
+    --save-button-bg: #2265a2;
+    --save-button-text: #d2dbeb;
 }
