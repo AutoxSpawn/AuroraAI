@@ -1,25 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-          const savedFont = localStorage.getItem('selectedFontClass');
-          const savedSize = localStorage.getItem('selectedFontSize');
-          
-          if (savedFont) {
-            document.documentElement.className = document.documentElement.className
-              .replace(/\bfont-\S+/g, '')
-              .replace(/\blight-theme\b/, 'light-theme')
-              .replace(/\bsize-\S+/g, '');
-            document.documentElement.classList.add(savedFont);
-          }
-          
-          if (savedSize) {
-            document.documentElement.classList.remove('size-small', 'size-medium', 'size-large');
-            document.documentElement.classList.add(`size-${savedSize}`);
-          }
-        });
-    </script> 
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const html = document.documentElement;
+      
+      const theme = localStorage.getItem('selectedTheme') || "sky-theme";
+      const size = localStorage.getItem('selectedFontSize') || "size-medium";
+      const font = localStorage.getItem('selectedFontClass') || "font-poppins";
+      
+      html.className = `${theme} ${size} ${font}`;
+    });
+  </script>
     
     <meta charset="UTF-8" />
     <title>Aurora AI & Chatbox</title>
