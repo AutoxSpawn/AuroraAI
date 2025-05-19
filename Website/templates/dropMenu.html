@@ -41,37 +41,52 @@
 </li>
 
 <script>
-  //Theme Switcher (was delected from js, have not change in repo)
-  function initializeThemeSwitcher() {
-      const savedTheme = localStorage.getItem("theme") || "light";
-      
-      // Apply theme immediately
-      applyTheme(savedTheme);
+  //Theme Switcher
+  function themeSwitcher() {
+      const savedLightTheme = localStorage.getItem("selectedLightTheme") || "sky-theme";
+      const savedDarkTheme = localStorage.getItem("selectedDarkTheme") || "space-theme";
       
       // Set up radio buttons if they exist
       const lightThemeRadio = document.getElementById("light-theme");
       const darkThemeRadio = document.getElementById("dark-theme");
       
       if (lightThemeRadio && darkThemeRadio) {
-          if (savedTheme === "dark") darkThemeRadio.checked = true;
-          else lightThemeRadio.checked = true;
+          const currentTheme = localStorage.getItem("currentTheme") || savedLightTheme;
           
-          lightThemeRadio.addEventListener("change", () => applyTheme("light"));
-          darkThemeRadio.addEventListener("change", () => applyTheme("dark"));
+          if (currentTheme === "dark-theme") {
+            darkThemeRadio.checked = true;
+          } else {
+            lightThemeRadio.checked = true
+          };
+          
+          lightThemeRadio.addEventListener("change", () => {
+            applyTheme(savedLightTheme)
+          });
+
+          darkThemeRadio.addEventListener("change", () => {
+            applyTheme(savedDarkTheme);
+          });
       }
   }
 
   function applyTheme(theme) {
-      const html = document.documentElement;
-      html.classList.remove("light-theme", "dark-theme");
-      html.classList.add(`${theme}-theme`);
-      localStorage.setItem("theme", theme);
+    const html = document.documentElement;
+    const currentClasses = Array.from(html.classList).filter(cls => 
+      !cls.endsWith("-theme") && 
+      !cls.startsWith("size-") && 
+      !cls.startsWith("font-")
+    );
+
+    // Remove any existing *-theme class
+    html.classList.remove(...Array.from(html.classList).filter(cls => cls.endsWith("-theme")));
+    html.classList.add(theme, ...currentClasses);
+    localStorage.setItem("currentTheme", theme);
   }
 
-  // drop down menu show function (was delected from js, havent change it in repo)
+  // drop down menu show function
   document.addEventListener('DOMContentLoaded', function() {
 
-    initializeThemeSwitcher();
+    themeSwitcher();
 
     const dropDownButton = document.querySelector('.dropDownButton');
     const settingMenu = document.getElementById('settingMenu');

@@ -1,17 +1,24 @@
 <!DOCTYPE html>
 <html lang="en" class="light-theme size-medium font-poppins">
 <head>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const html = document.documentElement;
+      
+      const theme = localStorage.getItem('currentTheme') || (localStorage.getItem('selecedLightTheme')|| "sky-theme");
+      const size = localStorage.getItem('selectedFontSize') || "size-medium";
+      const font = localStorage.getItem('selectedFontClass') || "font-poppins";
+      
+      html.className = `${theme} ${size} ${font}`;
+    });
+  </script>   
   
   <meta charset="UTF-8">
   <title>Settings</title>
   <link rel="shortcut icon" href="{{ url_for('static', filename='images/favicon.ico')}}">
-
-  <!-- Stylesheets -->
   <link rel="stylesheet" href="{{ url_for('static', filename='css/dynamicStyles.css') }}">
   <link rel="stylesheet" href="{{ url_for('static', filename='css/dropMenu.css') }}">
   <link rel="stylesheet" href="{{ url_for('static', filename='css/setting.css')}}">
-
-  <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Koh+Santepheap:wght@100;300;400;700;900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Solway:wght@300;400;500;700;800&family=Zain:ital,wght@0,200;0,300;0,400;0,700;0,800;0,900;1,300;1,400&display=swap" rel="stylesheet">
@@ -57,14 +64,21 @@
         <button type="button" class="large-size">Large</button>
       </div>
 
-      <!-- Theme  Style -->
-      <div class="themeGp">
-        <p class="group-title">Color</p>
+      <!-- Light Mode Theme -->
+      <div class="lightThemeGp">
+        <p class="group-title">Light Theme</p>
         <button type="button" class="sky-theme">Sky</button>
         <button type="button" class="violet-theme">Violet</button>
         <button type="button" class="matcha-theme">Matcha</button>
         <button type="button" class="peach-theme">Peach</button>
         <button type="button" class="rose-theme">Rose</button>
+      </div>
+
+      <!-- Dark Mode Theme -->
+      <div class="darkThemeGp">
+        <p class="group-title">Dark Theme</p>
+        <button type="button" class="space-theme">Space</button>
+        <button type="button" class="sea-theme">Sea</button>
       </div>
 
       <!-- Save Button -->
@@ -77,7 +91,7 @@
             Group 5 | Drexel University</p>
   </footer>
 
-  <script>
+   <script>
     document.addEventListener('DOMContentLoaded', function () {
       applySavedSettings();
       setupButtonGroups();
@@ -105,7 +119,7 @@
         selector: '.fontSizeGp button',
         storageKey: 'selectedFontSize'
       },
-      theme: {
+      lightTheme: {
         classes: {
           "Sky": "sky-theme",
           "Violet": "violet-theme",
@@ -113,20 +127,25 @@
           "Peach": "peach-theme",
           "Rose": "rose-theme"
         },
-        selector: '.themeGp button',
-        storageKey: 'selectedTheme'
-      }
+        selector: '.lightThemeGp button',
+        storageKey: 'selectedLightTheme'
+      },
+      darkTheme: {
+        classes: {
+          "Space": "space-theme",
+          "Sea": "sea-theme"
+        },
+        selector: '.darkThemeGp button',
+        storageKey: 'selectedDarkTheme'
+      },
     };
 
     function updateHtmlClass(theme, size, font) {
       document.documentElement.className = `${theme} ${size} ${font}`;
+      localStorage.setItem('currentTheme', theme);
     }
 
     function saveSettings() {
-      let newTheme = "sky-theme";
-      let newSize = "size-medium";
-      let newFont = "font-poppins";
-
       Object.entries(settingsConfig).forEach(([key, config]) => {
         const selectedBtn = document.querySelector(`${config.selector}.selected`);
         if (!selectedBtn) return;
@@ -136,22 +155,29 @@
         if (!selectedClass)return;
 
         localStorage.setItem(config.storageKey, selectedClass);
-
-        if (key === 'theme') newTheme = selectedClass;
-        if (key === 'fontSize') newSize = selectedClass;
-        if (key === 'fontFamily') newFont = selectedClass;
       });
 
-      updateHtmlClass(newTheme, newSize, newFont);
-      alert("Settings Saved!");
+      // Apply current theme based on what's active (light or dark)
+      const currentTheme = document.documentElement.classList.value.split(' ').find(cls => cls.endsWith("-theme"));
+      const isDarkTheme = currentTheme === localStorage.getItem('selectedDarkTheme');
+      const themeToApply = isDarkTheme ? localStorage.getItem('selectedDarkTheme') : localStorage.getItem('selectedLightTheme');
+      
+      updateHtmlClass(
+        themeToApply || "sky-theme",
+        localStorage.getItem('selectedFontSize') || "size-medium",
+        localStorage.getItem('selectedFontClass') || "font-poppins"
+      );
+      
+      alert("Setting Saved!");
     }
 
     function applySavedSettings() {
-      const theme = localStorage.getItem(settingsConfig.theme.storageKey) || "sky-theme";
-      const size = localStorage.getItem(settingsConfig.fontSize.storageKey) || "size-medium";
-      const font = localStorage.getItem(settingsConfig.fontFamily.storageKey) || "font-poppins";
+      const theme = localStorage.getItem('currentTheme') || (localStorage.getItem('selectedLightTheme')|| "sky-theme");
+      const size = localStorage.getItem('selectedFontSize') || "size-medium";
+      const font = localStorage.getItem('selectedFontClass') || "font-poppins";
 
       updateHtmlClass(theme, size, font);
+
       Object.values(settingsConfig).forEach(config => {
         const savedClass = localStorage.getItem(config.storageKey);
         if (!savedClass) return;
