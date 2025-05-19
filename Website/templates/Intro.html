@@ -1,9 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <script>
-        document.documentElement.className = localStorage.getItem('theme') === 'dark' ? 'dark-theme' : 'light-theme';
-    </script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const html = document.documentElement;
+      const theme = localStorage.getItem('selectedTheme') || "sky-theme";
+      html.className = `${theme}`;
+    });
+  </script>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Aurora</title>
