@@ -1,18 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" class="light-theme size-medium font-poppins">
-<head>
-  <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      const html = document.documentElement;
-      
-      const theme = localStorage.getItem('selectedTheme') || (localStorage.getItem('selectedLightTheme')|| "sky-theme");
-      const size = localStorage.getItem('selectedFontSize') || "size-medium";
-      const font = localStorage.getItem('selectedFontClass') || "font-poppins";
-      
-      html.className = `${theme} ${size} ${font}`;
-    });
-  </script>      
-  
+<head>    
   <meta charset="UTF-8">
   <title>Settings</title>
   <link rel="shortcut icon" href="{{ url_for('static', filename='images/favicon.ico')}}">
@@ -91,119 +79,149 @@
             Group 5 | Drexel University</p>
   </footer>
 
-   <script>
-    document.addEventListener('DOMContentLoaded', function () {
-      applySavedSettings();
-      setupButtonGroups();
-    });
-
-    const settingsConfig = {
-      fontFamily: {
-        classes: {
-          "Poppins": "font-poppins",
-          "DM Serif Display": "font-serif",
-          "Montserrat Alternates": "font-montserrat",
-          "Playwrite Australia NSW": "font-playwrite",
-          "Marck Script": "font-marck",
-          "Pacifico": "font-pacifico"
-        },
-        selector: '.fontButtonGp button',
-        storageKey: 'selectedFontClass'
-      },
-      fontSize: {
-        classes: {
-          "Small": "size-small",
-          "Medium": "size-medium",
-          "Large": "size-large"
-        },
-        selector: '.fontSizeGp button',
-        storageKey: 'selectedFontSize'
-      },
-      lightTheme: {
-        classes: {
-          "Sky": "sky-theme",
-          "Violet": "violet-theme",
-          "Matcha": "matcha-theme",
-          "Peach": "peach-theme",
-          "Rose": "rose-theme"
-        },
-        selector: '.lightThemeGp button',
-        storageKey: 'selectedLightTheme'
-      },
-      darkTheme: {
-        classes: {
-          "Space": "space-theme",
-          "Sea": "sea-theme"
-        },
-        selector: '.darkThemeGp button',
-        storageKey: 'selectedDarkTheme'
-      },
-    };
-
+ <script>
     function updateHtmlClass(theme, size, font) {
-      document.documentElement.className = `${theme} ${size} ${font}`;
-      localStorage.setItem('currentTheme', theme);
+        const html = document.documentElement;
+        html.className = `${theme} ${size} ${font}`;
     }
 
+    document.addEventListener('DOMContentLoaded', function() {
+        applyCurrentTheme();
+        applySavedSettings();
+        setupButtonGroups();
+    });
+
+    function applyCurrentTheme() {
+        const html = document.documentElement;
+        const isDarkMode = localStorage.getItem('isDarkMode') === 'true';
+        const theme = isDarkMode 
+            ? localStorage.getItem('selectedDarkTheme') || "space-theme"
+            : localStorage.getItem('selectedLightTheme') || "sky-theme";
+        const size = localStorage.getItem('selectedFontSize') || "size-medium";
+        const font = localStorage.getItem('selectedFontClass') || "font-poppins";
+        
+        html.className = `${theme} ${size} ${font}`;
+    }
+
+    const settingsConfig = {
+        fontFamily: {
+            classes: {
+                "Poppins": "font-poppins",
+                "DM Serif Display": "font-serif",
+                "Montserrat Alternates": "font-montserrat",
+                "Playwrite Australia NSW": "font-playwrite",
+                "Marck Script": "font-marck",
+                "Pacifico": "font-pacifico"
+            },
+            selector: '.fontButtonGp button',
+            storageKey: 'selectedFontClass'
+        },
+        fontSize: {
+            classes: {
+                "Small": "size-small",
+                "Medium": "size-medium",
+                "Large": "size-large"
+            },
+            selector: '.fontSizeGp button',
+            storageKey: 'selectedFontSize'
+        },
+        lightTheme: {
+            classes: {
+                "Sky": "sky-theme",
+                "Violet": "violet-theme",
+                "Matcha": "matcha-theme",
+                "Peach": "peach-theme",
+                "Rose": "rose-theme"
+            },
+            selector: '.lightThemeGp button',
+            storageKey: 'selectedLightTheme'
+        },
+        darkTheme: {
+            classes: {
+                "Space": "space-theme",
+                "Sea": "sea-theme"
+            },
+            selector: '.darkThemeGp button',
+            storageKey: 'selectedDarkTheme'
+        },
+    };
+
     function saveSettings() {
-      Object.entries(settingsConfig).forEach(([key, config]) => {
-        const selectedBtn = document.querySelector(`${config.selector}.selected`);
-        if (!selectedBtn) return;
+        Object.entries(settingsConfig).forEach(([key, config]) => {
+            const selectedBtn = document.querySelector(`${config.selector}.selected`);
+            if (!selectedBtn) return;
 
-        const label = selectedBtn.textContent.trim();
-        const selectedClass = config.classes[label];
-        if (!selectedClass)return;
+            // Get the text content from the button's innerHTML or data attribute
+            const label = selectedBtn.textContent.trim() || 
+                         selectedBtn.dataset.themeName || 
+                         selectedBtn.classList.value.match(/(sky|violet|matcha|peach|rose|space|sea)-theme/)?.[0].replace('-theme', '');
+            
+            if (!label) return;
 
-        localStorage.setItem(config.storageKey, selectedClass);
-      });
+            const selectedClass = config.classes[label];
+            if (!selectedClass) return;
 
-      // Apply current theme based on what's active (light or dark)
-      const currentTheme = document.documentElement.classList.value.split(' ').find(cls => cls.endsWith("-theme"));
-      const isDarkTheme = currentTheme === localStorage.getItem('selectedDarkTheme');
-      const themeToApply = isDarkTheme ? localStorage.getItem('selectedDarkTheme') : localStorage.getItem('selectedLightTheme');
-      
-      updateHtmlClass(
-        themeToApply || "sky-theme",
-        localStorage.getItem('selectedFontSize') || "size-medium",
-        localStorage.getItem('selectedFontClass') || "font-poppins"
-      );
-      
-      alert("Setting Saved!");
+            localStorage.setItem(config.storageKey, selectedClass);
+        });
+
+        const isDarkMode = localStorage.getItem('isDarkMode') === 'true';
+        const themeToApply = isDarkMode 
+            ? localStorage.getItem('selectedDarkTheme') || "space-theme"
+            : localStorage.getItem('selectedLightTheme') || "sky-theme";
+        
+        updateHtmlClass(
+            themeToApply,
+            localStorage.getItem('selectedFontSize') || "size-medium",
+            localStorage.getItem('selectedFontClass') || "font-poppins"
+        );
+        
+        alert("Settings Saved!");
     }
 
     function applySavedSettings() {
-      const theme = localStorage.getItem('currentTheme') || (localStorage.getItem('selectedLightTheme')|| "sky-theme");
-      const size = localStorage.getItem('selectedFontSize') || "size-medium";
-      const font = localStorage.getItem('selectedFontClass') || "font-poppins";
+        const isDarkMode = localStorage.getItem('isDarkMode') === 'true';
+        const theme = isDarkMode 
+            ? localStorage.getItem('selectedDarkTheme') || "space-theme"
+            : localStorage.getItem('selectedLightTheme') || "sky-theme";
+        const size = localStorage.getItem('selectedFontSize') || "size-medium";
+        const font = localStorage.getItem('selectedFontClass') || "font-poppins";
 
-      updateHtmlClass(theme, size, font);
+        updateHtmlClass(theme, size, font);
 
-      Object.values(settingsConfig).forEach(config => {
-        const savedClass = localStorage.getItem(config.storageKey);
-        if (!savedClass) return;
+        Object.values(settingsConfig).forEach(config => {
+            const savedClass = localStorage.getItem(config.storageKey);
+            if (!savedClass) return;
 
-        const buttons = document.querySelectorAll(config.selector);
-        buttons.forEach(btn => {
-          btn.classList.remove('selected');
-          const label = btn.textContent.trim();
-          if (config.classes[label] === savedClass) {
-            btn.classList.add('selected');
-          }
+            const label = Object.keys(config.classes).find(
+                key => config.classes[key] === savedClass
+            );
+
+            if (!label) return;
+
+            const buttons = document.querySelectorAll(config.selector);
+            buttons.forEach(btn => {
+                btn.classList.remove('selected');
+                const btnLabel = btn.textContent.trim() || 
+                                btn.dataset.themeName || 
+                                btn.classList.value.match(/(sky|violet|matcha|peach|rose|space|sea)-theme/)?.[0].replace('-theme', '');
+                if (btnLabel && config.classes[btnLabel] === savedClass) {
+                    btn.classList.add('selected');
+                }
+            });
         });
-      });
     }
 
     function setupButtonGroups() {
-      Object.values(settingsConfig).forEach(config => {
-        const buttons = document.querySelectorAll(config.selector);
-        buttons.forEach(button => {
-          button.addEventListener('click', function () {
-            buttons.forEach(btn => btn.classList.remove('selected'));
-            this.classList.add('selected');
-          });
+        Object.values(settingsConfig).forEach(config => {
+            const buttons = document.querySelectorAll(config.selector);
+            buttons.forEach(button => {
+                button.addEventListener('click', function() {
+                    buttons.forEach(btn => btn.classList.remove('selected'));
+                    this.classList.add('selected');
+                });
+            });
         });
-      });
     }
-  </script>
+</script>
 </body>
 </html>
