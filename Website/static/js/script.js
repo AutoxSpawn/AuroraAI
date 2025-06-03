@@ -52,73 +52,61 @@ async function sendMessage() {
     const messageText = messageInput.value.trim();
     if (messageText === '') return;
 
+    // Display user's message
     const messageItem = document.createElement('li');
     messageItem.textContent = `User: ${messageText}`;
     messageItem.classList.add('highlighted', 'user-message');
     messageList.appendChild(messageItem);
 
-    autoScroll();
-
     messageInput.value = '';
     messageInput.focus();
+    autoScroll();
 
-    // send message to Flask backend
+    // Show the typing indicator immediately
+    typingIndicator.style.display = "inline-block";
+
     try {
         const response = await fetch("/chat", {
             method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
+            headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ message: messageText }),
         });
 
         const data = await response.json();
 
-        // Show the typing indicator
-        typingIndicator.style.display = "inline-block"; 
+        // Hide typing indicator only after response
+        typingIndicator.style.display = "none";
 
-        // Auto scroll
-        autoScroll();
+        // Display AI's message
+        const aiMessage = document.createElement('li');
+        aiMessage.classList.add('highlighted', 'ai-message');
+        messageList.appendChild(aiMessage);
+        typeMessage(aiMessage, `Aurora: ${data.response}`, 25);
 
-        // Simulate Aurora's response after a delay
-        setTimeout(() => { 
-            typingIndicator.style.display = "none"; 
-
-        //Display AI response
-            const aiMessage = document.createElement('li');
-            aiMessage.textContent = `Aurora: ${data.response}`;
-            aiMessage.classList.add('highlighted', 'ai-message');
-            messageList.appendChild(aiMessage);
-
-            // play TTS audio 
-            if (data.audio_url) {
-                const uniqueUrl = data.audio_url + '?t=' + new Date().getTime();
-                const audio = new Audio(uniqueUrl);
-                audio.addEventListener('ended', async() => {
-                    try{
-                        const deleteResponse = await fetch('/delete_audio', { method: 'POST'});
-                        if (deleteResponse.ok) {
-                            console.log('Audio file deleted successfully');
-                        } else {
-                            console.error('Failed to delete audio file');
-                        }
-                    } catch (error) {
-                        console.error('Error while deleting audio file:', error);
+        // Play TTS audio
+        if (data.audio_url) {
+            const uniqueUrl = data.audio_url + '?t=' + new Date().getTime();
+            const audio = new Audio(uniqueUrl);
+            audio.addEventListener('ended', async () => {
+                try {
+                    const deleteResponse = await fetch('/delete_audio', { method: 'POST' });
+                    if (!deleteResponse.ok) {
+                        console.error('Failed to delete audio file');
                     }
-                });
-                audio.play();
-            }
+                } catch (error) {
+                    console.error('Error while deleting audio file:', error);
+                }
+            });
+            audio.play();
+        }
 
-            // Simulate typing effect for Aurora's response
-            typeMessage(aiMessage, `Aurora: ${data.response}`, 25);  // Using backend response here
-
-            // Auto scroll
-            setTimeout(autoScroll, 500); 
-        }, 800);
+        autoScroll();
     } catch (error) {
-        console.error("Error: ",error);
+        console.error("Error:", error);
+        typingIndicator.style.display = "none";
     }
 }
+
 
 //text to speech function using Web Speech Recognition
 if (SpeechRecognition) {
