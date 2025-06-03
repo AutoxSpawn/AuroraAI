@@ -219,8 +219,6 @@
     --drop-menu-divider: #fff ; /*drop down divider*/
     --drop-menu-text: #fff;
 
-    /* recommand add scroll bar in about css if in a small window*/
-    /* not needed just recommmanded */
     /* about page */
     --about-title: #2e0f47; /*about page title (but do not know where it is)*/ 
     --about-body: #2e0f47 ; /*about page body*/ 
