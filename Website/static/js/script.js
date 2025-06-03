@@ -1,13 +1,184 @@
 // JavaScript to handle messages
+const sendButton = document.getElementById('sendButton');
+const messageInput = document.getElementById('messageInput');
+const messageList = document.getElementById('messageList');
+
+//Auto-scrolling
+const chatWindow = document.getElementById('chatWindow');
+
+//Notifies users Aurora is responding
+const typingIndicator = document.getElementById('typingIndicator');
+
+//stt
 let isRecording = false;
 const SpeechRecognition =
   window.SpeechRecognition || window.webkitSpeechRecognition;
-const sendButton = document.getElementById("sendButton");
 const recordButton = document.getElementById("recordButton");
-const messageInput = document.getElementById("messageInput");
-const messageList = document.getElementById("messageList");
-const chatWindow = document.getElementById("chatWindow");
-const typingIndicator = document.getElementById("typingIndicator");
+
+sendButton.addEventListener("click", sendMessage);
+messageInput.addEventListener("keypress", (event) => {
+  if (event.key === "Enter") {
+    sendMessage();
+  }
+});
+
+// Notifies users Aurora is responding - Steven
+function typeMessage(element, text, delay = 25) { 
+    let i = 0; 
+    element.innerHTML = ""; 
+   
+    function typing() { 
+      if (i < text.length) { 
+        element.innerHTML += text.charAt(i); 
+        autoScroll(); 
+        i++; 
+        setTimeout(typing, delay); 
+      } 
+    } 
+    typing(); 
+} 
+
+// Auto scroll - Steven
+function autoScroll() { 
+    chatWindow.scrollTo({ 
+      top: chatWindow.scrollHeight, 
+      behavior: "smooth", 
+    }); 
+} 
+
+
+// Send message to Backend
+async function sendMessage() {
+    const messageText = messageInput.value.trim();
+    if (messageText === '') return;
+
+    const messageItem = document.createElement('li');
+    messageItem.textContent = `User: ${messageText}`;
+    messageItem.classList.add('highlighted', 'user-message');
+    messageList.appendChild(messageItem);
+
+    autoScroll();
+
+    messageInput.value = '';
+    messageInput.focus();
+
+    // send message to Flask backend
+    try {
+        const response = await fetch("/chat", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ message: messageText }),
+        });
+
+        const data = await response.json();
+
+        // Show the typing indicator
+        typingIndicator.style.display = "inline-block"; 
+
+        // Auto scroll
+        autoScroll();
+
+        // Simulate Aurora's response after a delay
+        setTimeout(() => { 
+            typingIndicator.style.display = "none"; 
+
+        //Display AI response
+            const aiMessage = document.createElement('li');
+            aiMessage.textContent = `Aurora: ${data.response}`;
+            aiMessage.classList.add('highlighted', 'ai-message');
+            messageList.appendChild(aiMessage);
+
+            // play TTS audio 
+            if (data.audio_url) {
+                const uniqueUrl = data.audio_url + '?t=' + new Date().getTime();
+                const audio = new Audio(uniqueUrl);
+                audio.addEventListener('ended', async() => {
+                    try{
+                        const deleteResponse = await fetch('/delete_audio', { method: 'POST'});
+                        if (deleteResponse.ok) {
+                            console.log('Audio file deleted successfully');
+                        } else {
+                            console.error('Failed to delete audio file');
+                        }
+                    } catch (error) {
+                        console.error('Error while deleting audio file:', error);
+                    }
+                });
+                audio.play();
+            }
+
+            // Simulate typing effect for Aurora's response
+            typeMessage(aiMessage, `Aurora: ${data.response}`, 25);  // Using backend response here
+
+            // Auto scroll
+            setTimeout(autoScroll, 500); 
+        }, 800);
+    } catch (error) {
+        console.error("Error: ",error);
+    }
+}
+
+//text to speech function using Web Speech Recognition
+if (SpeechRecognition) {
+    const recognition = new SpeechRecognition();
+    recognition.continuous = false;
+    recognition.lang = 'en-US';
+    recognition.interimResults = false;
+    recognition.maxAlternatives = 1;
+
+
+    recordButton.addEventListener('click', () => {
+        if (!isRecording) {
+            recognition.start();
+            isRecording = true;
+            messageInput.placeholder = "Recording...";
+            recordButton.textContent = "Stop";
+        } else {
+            recognition.stop();
+            reset();
+        }
+    });
+
+    recognition.onresult = (event) => {
+        const transcript = event.results[0][0].transcript;
+        messageInput.value = transcript;
+        reset();
+    };
+
+    recognition.onerror = (event) => {
+        console.error('Speech recognition error:', event.error);
+        reset();
+    };
+} else {
+    console.error("Speech Recognition API not supportws in this browser.");
+}
+
+function reset() {
+    isRecording = false;
+    messageInput.placeholder = "Type your message or click to start recording";
+    recordButton.textContent = "Record";
+}
+
+sendButton.addEventListener('click', sendMessage);
+messageInput.addEventListener('keypress', (event) => {
+    if (event.key === 'Enter') {
+        sendMessage();
+    }
+});
+
+
+//toggle game catalog
+function toggleGameCatalog() {
+    const chatSection = document.querySelector(".chatbox");
+    const gameCatalog = document.getElementById("gameCatalog");
+  
+    const isVisible = gameCatalog.style.display === "block";
+  
+    gameCatalog.style.display = isVisible ? "none" : "block";
+    chatSection.style.display = isVisible ? "flex" : "none";
+}
 
 // Game score tracking variables
 let userScore = 0;
@@ -18,225 +189,71 @@ let tieScore = 0;
 let userStreak = 0;
 let auroraStreak = 0;
 
-//text to speech function using Web Speech Recognition
-if (SpeechRecognition) {
-  const recognition = new SpeechRecognition();
-  recognition.continuous = false;
-  recognition.lang = "en-US";
-  recognition.interimResults = false;
-  recognition.maxAlternatives = 1;
-
-  recordButton.addEventListener("click", () => {
-    if (!isRecording) {
-      recognition.start();
-      isRecording = true;
-      messageInput.placeholder = "Recording...";
-      recordButton.textContent = "Stop";
-    } else {
-      recognition.stop();
-      reset();
-    }
-  });
-
-  recognition.onresult = (event) => {
-    const transcript = event.results[0][0].transcript;
-    messageInput.value = transcript;
-    reset();
-  };
-
-  recognition.onerror = (event) => {
-    console.error("Speech recognition error:", event.error);
-    reset();
-  };
-} else {
-  console.error("Speech Recognition API not supportws in this browser.");
-}
-
-function reset() {
-  isRecording = false;
-  messageInput.placeholder = "Type your message or click to start recording";
-  recordButton.textContent = "Record";
-}
-
-// Send message to Backend
-async function sendMessage() {
-  const messageText = messageInput.value.trim();
-  if (messageText === "") return;
-
-  const messageItem = document.createElement("li");
-  messageItem.textContent = `User: ${messageText}`;
-  messageItem.classList.add("highlighted", "user-message");
-  messageList.appendChild(messageItem);
-
-  autoScroll();
-
-  typingIndicator.style.display = "inline-block";
-
-  messageInput.value = "";
-  messageInput.focus();
-
-  // send message to Flask backend
-  try {
-    const response = await fetch("/chat", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ message: messageText }),
-    });
-
-    const data = await response.json();
-
-    // Auto scroll
-    autoScroll();
-
-    // Simulate Aurora's response after a delay
-    setTimeout(() => {
-      typingIndicator.style.display = "none";
-
-      //Display AI response
-      const aiMessage = document.createElement("li");
-      aiMessage.textContent = `Aurora: ${data.response}`;
-      aiMessage.classList.add("highlighted", "ai-message");
-      messageList.appendChild(aiMessage);
-
-      autoScroll();
-
-      // play TTS audio
-      if (data.audio_url) {
-        const uniqueUrl = data.audio_url + "?t=" + new Date().getTime();
-        const audio = new Audio(uniqueUrl);
-        audio.addEventListener("ended", async () => {
-          try {
-            const deleteResponse = await fetch("/delete_audio", {
-              method: "POST",
-            });
-            if (deleteResponse.ok) {
-              console.log("Audio file deleted successfully");
-            } else {
-              console.error("Failed to delete audio file");
-            }
-          } catch (error) {
-            console.error("Error while deleting audio file:", error);
-          }
-        });
-        audio.play();
-      }
-
-      // Simulate typing effect for Aurora's response
-      typeMessage(aiMessage, `Aurora: ${data.response}`, 25); // Using backend response here
-
-      // Auto scroll
-      setTimeout(autoScroll, 500);
-    }, 800);
-  } catch (error) {
-    console.error("Error: ", error);
-  }
-}
-
-sendButton.addEventListener("click", sendMessage);
-messageInput.addEventListener("keypress", (event) => {
-  if (event.key === "Enter") {
-    sendMessage();
-  }
-});
-
-// Notifies users Aurora is responding - Steven
-function typeMessage(element, text, delay = 25) {
-  let i = 0;
-  element.innerHTML = "";
-
-  function typing() {
-    if (i < text.length) {
-      element.innerHTML += text.charAt(i);
-      autoScroll();
-      i++;
-      setTimeout(typing, delay);
-    }
-  }
-  typing();
-}
-
-// Auto scroll - Steven
-function autoScroll() {
-  chatWindow.scrollTo({
-    top: chatWindow.scrollHeight,
-    behavior: "smooth",
-  });
-}
-
-function toggleGameCatalog() {
-  const chatSection = document.querySelector(".chatbox");
-  const gameCatalog = document.getElementById("gameCatalog");
-
-  const isVisible = gameCatalog.style.display === "block";
-
-  gameCatalog.style.display = isVisible ? "none" : "block";
-  chatSection.style.display = isVisible ? "flex" : "none";
-}
-
+// Rock Paper Scissors
 function playRPS(userChoice) {
-  const choices = ["rock", "paper", "scissors"];
-  const aiChoice = choices[Math.floor(Math.random() * choices.length)];
+    const choices = ["rock", "paper", "scissors"];
+    const aiChoice = choices[Math.floor(Math.random() * choices.length)];
+  
+    let resultMessage = `You chose ${userChoice}. Aurora chose ${aiChoice}.`;
+    let outcome = "";
+  
+    console.log("User picked:", userChoice);
+    console.log("Aurora picked:", aiChoice);
 
-  let resultMessage = `You chose ${userChoice}. Aurora chose ${aiChoice}.`;
-  let outcome = "";
-
-  console.log("User picked:", userChoice);
-  console.log("Aurora picked:", aiChoice);
-
-  // ✅ Correct comparison logic
-  if (userChoice === aiChoice) {
-    outcome = "It's a draw!";
-    tieScore++;
-    userStreak = 0;
-    auroraStreak = 0;
-  } else if (
-    (userChoice === "rock" && aiChoice === "scissors") ||
-    (userChoice === "paper" && aiChoice === "rock") ||
-    (userChoice === "scissors" && aiChoice === "paper")
-  ) {
-    outcome = "You win! 💪";
-    userScore++;
-    userStreak++;
-    auroraStreak = 0;
-  } else {
-    outcome = "Aurora wins! 😏";
-    auroraScore++;
-    auroraStreak++;
-    userStreak = 0;
-  }
-
-  updateScoreboard();
-  document.getElementById(
-    "rpsResult"
-  ).innerText = `${resultMessage}\n${outcome}`;
-
-  const reaction = generateAuroraReaction(userChoice, aiChoice, outcome);
-  appendChatMessage("Aurora", reaction);
-  autoScroll();
+    if (userChoice === aiChoice) {
+      outcome = "It's a draw!";
+      tieScore++;
+      userStreak = 0;
+      auroraStreak = 0;
+    } else if (
+      (userChoice === "rock" && aiChoice === "scissors") ||
+      (userChoice === "paper" && aiChoice === "rock") ||
+      (userChoice === "scissors" && aiChoice === "paper")
+    ) {
+      outcome = "You win! 💪";
+      userScore++;
+      userStreak++;
+      auroraStreak = 0;
+    } else {
+      outcome = "Aurora wins! 😏";
+      auroraScore++;
+      auroraStreak++;
+      userStreak = 0;
+    }
+  
+    updateScoreboard();
+    document.getElementById(
+      "rpsResult"
+    ).innerText = `${resultMessage}\n${outcome}`;
+  
+    const reaction = generateAuroraReaction(userChoice, aiChoice, outcome);
+    appendChatMessage("Aurora", reaction);
+    autoScroll();
 }
-
+  
+//Close Rock Paper Scissors Game 
 function closeRPSGame() {
   document.getElementById("rpsGame").style.display = "none";
   document.getElementById("gameCatalog").style.display = "block";
-}
+  }
 
+  //Opem Rock Paper Scissors Game
 function openRPSGame() {
   document.getElementById("gameCatalog").style.display = "none";
   document.getElementById("rpsGame").style.display = "block";
-
+  
   const chatSection = document.querySelector(".chatbox");
   if (chatSection) chatSection.style.display = "flex";
 }
 
+//Generate Aurora Reaction
 function generateAuroraReaction(user, ai, outcome) {
   if (userStreak >= 3) {
-    return `Woah, ${userStreak} wins in a row?! Okay, now you're just showing off, babe 😳💖`;
+      return `Woah, ${userStreak} wins in a row?! Okay, now you're just showing off, babe 😳💖`;
   }
 
   if (auroraStreak >= 3) {
-    return `Hehe~ that's ${auroraStreak} wins for me! You're so cute when you lose 😘`;
+      return `Hehe~ that's ${auroraStreak} wins for me! You're so cute when you lose 😘`;
   }
 
   const winMessages = [
@@ -264,20 +281,22 @@ function generateAuroraReaction(user, ai, outcome) {
   ];
 
   if (outcome.includes("draw")) {
-    return drawMessages[Math.floor(Math.random() * drawMessages.length)];
+      return drawMessages[Math.floor(Math.random() * drawMessages.length)];
   } else if (outcome.includes("You win")) {
-    return winMessages[Math.floor(Math.random() * winMessages.length)];
+      return winMessages[Math.floor(Math.random() * winMessages.length)];
   } else {
-    return loseMessages[Math.floor(Math.random() * loseMessages.length)];
+      return loseMessages[Math.floor(Math.random() * loseMessages.length)];
   }
 }
 
+// Update ScoreBoard of the RPS game
 function updateScoreboard() {
   document.getElementById("userScore").innerText = userScore;
   document.getElementById("auroraScore").innerText = auroraScore;
   document.getElementById("tieScore").innerText = tieScore;
 }
 
+// append chat message
 function appendChatMessage(sender, message) {
   const messageItem = document.createElement("li");
   messageItem.textContent = `${sender}: ${message}`;
@@ -288,6 +307,7 @@ function appendChatMessage(sender, message) {
   document.getElementById("messageList").appendChild(messageItem);
 }
 
+//function for word guess
 let secretWord = "";
 let maxAttempts = 6;
 let attemptsLeft = maxAttempts;
@@ -314,7 +334,7 @@ function startNewGame() {
         document.getElementById("guessGrid").innerHTML = "";
         document.getElementById(
           "guessResult"
-        ).innerText = `Attempts left: ${attemptsLeft}`;
+        ).innerText = 'Attempts left: ${attemptsLeft}';
         document.getElementById("guessInput").value = "";
         document.getElementById("guessInput").focus();
       } else {
@@ -393,11 +413,14 @@ function submitGuess() {
   }
 }
 
+// For the games catalog that uses PyGame
+// It checks for the user clicking on the list item
 document.addEventListener("DOMContentLoaded", () => {
   document.querySelectorAll(".game-list li").forEach((item) => {
     item.addEventListener("click", () => {
       const game = item.textContent.trim();
 
+      // All the games below are fetched and it's going to prompt a console error if it fails in launching the games
       if (game === "Pong Game") {
         fetch("/launchPong", { method: "POST" })
           .then((res) => res.json())
@@ -405,6 +428,24 @@ document.addEventListener("DOMContentLoaded", () => {
             console.log(data.status || data.error);
           })
           .catch((err) => console.error("Error launching Pong:", err));
+      }
+      
+      if (game === "Tug of War") {
+        fetch("/launchTugOfWar", { method: "POST" })
+          .then((res) => res.json())
+          .then((data) => {
+            console.log(data.status || data.error);
+          })
+          .catch((err) => console.error("Error launching Tug of War:", err));
+      }
+
+      if (game === "Click Runner") {
+          fetch("/launchClickRunner", { method: "POST" })
+            .then((res) => res.json())
+            .then((data) => {
+              console.log(data.status || data.error);
+            })
+            .catch((err) => console.error("Error launching Click Runner:", err));
       }
     });
   });
