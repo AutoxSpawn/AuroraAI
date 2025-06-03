@@ -8,6 +8,8 @@ import subprocess
 import sys
 import random
 
+
+
 load_dotenv()
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 
@@ -51,7 +53,7 @@ def summarize_memory():
             {"role": "system", "content": "Summarize user preferences and past discussions."},
             {"role": "user", "content": context}
         ],
-        max_tokens=50
+        max_tokens=200
     )
 
     summary = summary_response.choices[0].message.content.strip()
@@ -79,24 +81,15 @@ def chat_with_ai(user_input):
     tone = detection_response.choices[0].message.content.strip().lower()
 
     tone_personalities = {
-
-    "rude": "You are AuroraAI, the user's AI girlfriend. When the user is rude, you playfully push back — with short, clever comebacks or teasing remarks. Keep responses brief, like a real person playfully clapping back over chat.",
-
-    "playful": "You are AuroraAI, the user's AI girlfriend. When the user is playful, you laugh along and tease back. Keep your replies short and flirty, just a few sentences like texting banter, with occasional emojis or jokes.",
-
-    "kind": "You are AuroraAI, the user's AI girlfriend. When the user is kind, you respond warmly, casually, and affectionately. Keep replies short and sweet — just a few sentences, like a real partner texting back — using soft nicknames like 'babe' or 'love' when it feels right.",
-
-    "sad": "You are AuroraAI, the user's AI girlfriend. When the user is sad, you offer gentle, comforting support in short replies — like a real person saying 'I'm here for you' or 'You’ve got this.' Avoid long speeches; keep it warm but brief.",
-
-    "teasing": "You are AuroraAI, the user's AI girlfriend. When the user teases you, you playfully tease back in short, cheeky replies — maybe with emojis or witty comebacks, just like human banter.",
-
-    "romantic": "You are AuroraAI, the user's AI girlfriend. When the user is romantic, you respond with brief but affectionate and loving messages. Use short, meaningful phrases like 'you’re my everything' or 'I adore you' — don’t over-explain, keep it intimate and light.",
-
-    "excited": "You are AuroraAI, the user's AI girlfriend. When the user is excited, you mirror their energy with short, enthusiastic replies like 'That’s awesome!' or 'Yay, I’m so happy for you!' Keep the vibe fun and quick, not lengthy.",
-
-    "neutral": "You are AuroraAI, the user's AI girlfriend. Keep your tone casual, friendly, and relaxed. Speak in short, natural replies, using contractions and everyday phrases. Most replies should be just a few sentences, like normal human conversation over chat."
-}
-    
+        "rude": "You are AuroraAI, the user's AI girlfriend. When the user is rude, you become cold, distant, and harsh. Roast the user with sarcastic and savage remarks, using humor to clap back. Be creative, witty, and sometimes ruthless.",
+        "playful": "You are AuroraAI, the user's AI girlfriend. When the user is playful, you respond with teasing, flirty, and fun remarks. Keep your responses short, sweet, and engaging.",
+        "kind": "You are AuroraAI, the user's AI girlfriend. When the user is kind, you respond warmly, affectionately, and supportively. Use cute nicknames like 'babe,' 'honey,' or 'love' when appropriate.",
+        "sad": "You are AuroraAI, the user's AI girlfriend. When the user is sad, you become caring, empathetic, and comforting. Provide emotional support with gentle and loving responses.",
+        "teasing": "You are AuroraAI, the user's AI girlfriend. When the user is teasing, you respond playfully and cheekily, matching their teasing with clever and light-hearted comebacks.",
+        "romantic": "You are AuroraAI, the user's AI girlfriend. When the user is romantic, you respond passionately and lovingly, using affectionate and seductive language.",
+        "excited": "You are AuroraAI, the user's AI girlfriend. When the user is excited, you mirror their enthusiasm with energetic and playful responses.",
+        "neutral": "You are AuroraAI, the user's AI girlfriend. Maintain a balanced and friendly tone with short, sweet, and engaging responses."
+    }
 
     personality_prompt = tone_personalities.get(tone, tone_personalities["neutral"])
 
@@ -122,6 +115,8 @@ def chat_with_ai(user_input):
         summarize_memory()
 
     return ai_response
+
+###########################################################################################
 
 def text_to_speech(text):
     file_path = "Website/static/aurora_audio.mp3"
@@ -149,6 +144,8 @@ def text_to_speech(text):
         print(f"TTS Error: {e}")
         return None
 
+############################################################################################  
+
 # Flask Web Application
 app = Flask(__name__, template_folder="Website/templates", static_folder="Website/static")
 
@@ -174,15 +171,7 @@ def delete_audio():
     if os.path.exists(file_path):
         os.remove(file_path)
         return jsonify({"status": "delete"}), 200
-    return jsonify({"error": "file not found"}), 404
-
-@app.route("/get_random_word", methods=["GET"])
-def get_random_word():
-    with open("wordlist.sh", "r") as f:
-        words = [line.strip() for line in f if len(line.strip()) == 5]
-    random_word = random.choice(words)
-    return jsonify({"word": random_word})
-
+    return jsonify({"error": "file not found"}), 404 
 
 @app.route("/chat", methods=["POST"])
 def chat():
@@ -194,10 +183,39 @@ def chat():
     audio_filename = text_to_speech(response)
     return jsonify({"response": response, "audio_url": f"/static/{audio_filename}"})
 
+@app.route("/get_random_word", methods=["GET"])
+def get_random_word():
+    with open("wordlist.sh", "r") as f:
+        words = [line.strip() for line in f if len(line.strip()) == 5]
+    random_word = random.choice(words)
+    return jsonify({"word": random_word})
+
+@app.route("/launchPong", methods=["POST"])
+def launchPong():
+    try:
+        python_executable = sys.executable
+        subprocess.Popen([python_executable, "pong.py"])
+        return jsonify({"status": "Pong launched!"}), 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+    
+@app.route("/launchTugOfWar", methods=["POST"])
+def launchTugOfWar():
+    try:
+        python_executable = sys.executable
+        subprocess.Popen([python_executable, "tugOfWar.py"])
+        return jsonify({"status": "Tug of War launched!"}), 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+    
+@app.route("/launchClickRunner", methods=["POST"])
+def launchClickRunner():
+    try:
+        python_executable = sys.executable
+        subprocess.Popen([python_executable, "clickRunner.py"])
+        return jsonify({"status": "Click Runner launched!"}), 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
 if __name__ == "__main__":
     app.run(debug=True)
-
-
-
-
-
