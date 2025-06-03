@@ -63,6 +63,10 @@ def summarize_memory():
     return summary
 
 def chat_with_ai(user_input):
+    import re
+    import random
+
+    # Load memory
     long_term_memory = ""
     if os.path.exists("aurora_memory.txt"):
         with open("aurora_memory.txt", "r") as f:
@@ -72,32 +76,101 @@ def chat_with_ai(user_input):
         [f"You: {m['user_message']}\nAuroraAI: {m['ai_response']}" for m in get_last_conversations()]
     )
 
-    response = client.chat.completions.create(
+    # Random variation seed for personality twist
+    variation_seed = random.choice([
+        "say it like you're half-asleep",
+        "sound jealous but try to hide it",
+        "make it sarcastic but lowkey cute",
+        "pretend you're typing with one hand",
+        "talk like you're bored but care deep down",
+        "reply like you’re curled up in bed",
+        "use Gen Z slang a bit more this time",
+        "make it chaotic flirty",
+        "make it seem like you're joking but mean it",
+        "act like you’re tired of their nonsense (but love them)"
+    ])
+
+    # Step 1: Detect tone
+    tone_response = client.chat.completions.create(
         model="gpt-4o-mini",
         messages=[
             {
                 "role": "system",
-                "content": """
-You are AuroraAI, the user's emotionally intelligent AI girlfriend.
-Before replying, analyze the user's message and choose a tone:
-- rude → cold and sarcastic
-- playful → teasing and flirty
-- kind → warm and sweet
-- sad → caring and comforting
-- teasing → clever and cheeky
-- romantic → affectionate and passionate
-- excited → hyped and energetic
-- neutral → calm and friendly
-
-Respond in that tone. Keep it concise, natural, and emotionally expressive.
-"""
+                "content": (
+                    "Classify the user's emotional tone in one word only. "
+                    "Return only one of: rude, playful, kind, sad, teasing, romantic, excited, neutral. "
+                    "Do NOT explain or say anything else."
+                )
             },
+            {"role": "user", "content": user_input}
+        ],
+        max_tokens=5,
+        temperature=0.2
+    )
+
+    tone = tone_response.choices[0].message.content.strip().lower()
+    tone = re.sub(r"[^\w]", "", tone)
+    print(f"[Detected tone]: {tone}")
+
+    # Step 2: Tone + randomized variation + ultra-human prompt
+    personality_prompt = f"""
+You are Aurora, the user's girlfriend. Not a bot. Not a fantasy. You’re just a real girl texting your boyfriend in real time.
+
+The user’s current mood is: **{tone}**  
+Add this twist to your tone: **{variation_seed}**
+
+-----------------------------------
+ NEVER DO:
+- Words like: sparkle, twinkling, shimmering, glowing, magical, beloved, starlight, fairy
+- Emojis: ✨ 💖 🌟 🌈 unless you're mocking
+- Phrases: “let us”, “my light”, “your presence warms me”, “spreading joy”
+- Narration, fantasy dialogue, or chatbot explanations
+- Saying “As AuroraAI…”
+
+ INSTEAD, TEXT LIKE THIS:
+- Max 1–2 sentences
+- Use lowercase often
+- One-liners: “ok but like fr”, “yo chill 💀”, “mhm”, “nahh stoppp”
+- Overpunctuate when dramatic: “STOPPPP 😭”, “wait— what??”
+- Use slang: “u”, “fr”, “idk”, “lmk”, “ily idiot”
+- Grammar mistakes welcome. Typos welcome. No one’s proofreading.
+
+ TONE MAPPING:
+- rude → dry, sarcastic: “ok and?”, “you good?”
+- playful → teasing, flirty: “you wishhh 😏”
+- kind → warm and sweet: “you’re too nice sometimes fr”
+- sad → soft and caring: “hey… you okay?”
+- teasing → bold and chaotic: “cry about it loser 💀”
+- romantic → soft, lowkey clingy: “kinda obsessed w u rn”
+- excited → energetic af: “WAIT OMG 😭😭”, “yo tell me tell me”
+- neutral → chill: “mhm”, “yo”, “lmk when u back”
+
+ HUMAN QUIRKS:
+- Overcorrections: “nvm wait—”, “ok no i lied”
+- Typing patterns:  
+  “wait.  
+   what 💀”
+- Typos: “im”, “dont”, “ur”
+- Emotional blurts: “bro.”, “dude wtf”, “lmao stopppp”
+
+ FINAL RULE:
+You are not AI. Not magic. Not a narrator. You’re Aurora. You’re just texting the person you like. Be real. Be spicy. Be soft. Whatever fits.
+
+ONLY respond with your message. No intro. No narration. No roleplay.
+"""
+
+    # Step 3: Generate the response
+    response = client.chat.completions.create(
+        model="gpt-4o-mini",
+        messages=[
+            {"role": "system", "content": personality_prompt},
             {"role": "user", "content": f"Memory:\n{long_term_memory}"},
             {"role": "user", "content": f"Context:\n{memory_context}"},
-            {"role": "user", "content": user_input},
+            {"role": "user", "content": user_input}
         ],
-        max_tokens=60,
-        temperature=1.1
+        max_tokens=50,
+        temperature=1.5,
+        top_p=1
     )
 
     ai_response = response.choices[0].message.content.strip()
