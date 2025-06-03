@@ -4,9 +4,12 @@
 
   <script>
     document.addEventListener('DOMContentLoaded', function() {
-      const html = document.documentElement;
-      const theme = localStorage.getItem('selectedTheme') || "sky-theme";
-      html.className = `${theme}`;
+        const html = document.documentElement;
+        const isDarkMode = localStorage.getItem('isDarkMode') === 'true';
+        const theme = isDarkMode 
+            ? localStorage.getItem('selectedDarkTheme') || "space-theme"
+            : localStorage.getItem('selectedLightTheme') || "sky-theme";
+        html.className = `${theme}`;
     });
   </script>
 
