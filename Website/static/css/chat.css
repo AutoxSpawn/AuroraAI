@@ -285,6 +285,26 @@
   box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
 }
 
+.back-to-chat-button {
+  display: block;
+  margin: 25px auto 0 auto;
+  padding: 12px 24px;
+  font-size: 16px;
+  font-weight: 600;
+  color: white;
+  background-color: var(--game-button, #4e8cff);
+  border: none;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.back-to-chat-button:hover {
+  background-color: var(--game-button-hover, #3a6cd9);
+  transform: scale(1.05);
+}
+
 /*Have not change any color start from here  */
 
 .back-button {
