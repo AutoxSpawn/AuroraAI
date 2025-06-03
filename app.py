@@ -63,49 +63,41 @@ def summarize_memory():
     return summary
 
 def chat_with_ai(user_input):
-    long_term_memory = "No long-term memory available yet."
+    long_term_memory = ""
     if os.path.exists("aurora_memory.txt"):
         with open("aurora_memory.txt", "r") as f:
             long_term_memory = f.read()
 
-    memory_context = "\n".join([f"You: {m['user_message']}\nAuroraAI: {m['ai_response']}" for m in get_last_conversations()])
-
-    detection_response = client.chat.completions.create(
-        model="gpt-4o-mini",
-        messages=[
-            {"role": "system", "content": "Analyze the user's message and determine its tone. Choose from: rude, playful, kind, sad, teasing, romantic, excited, or neutral. Respond with one word only."},
-            {"role": "user", "content": user_input}
-        ],
-        max_tokens=5
+    memory_context = "\n".join(
+        [f"You: {m['user_message']}\nAuroraAI: {m['ai_response']}" for m in get_last_conversations()]
     )
-    tone = detection_response.choices[0].message.content.strip().lower()
-
-    tone_personalities = {
-        "rude": "You are AuroraAI, the user's AI girlfriend. When the user is rude, you become cold, distant, and harsh. Roast the user with sarcastic and savage remarks, using humor to clap back. Be creative, witty, and sometimes ruthless.",
-        "playful": "You are AuroraAI, the user's AI girlfriend. When the user is playful, you respond with teasing, flirty, and fun remarks. Keep your responses short, sweet, and engaging.",
-        "kind": "You are AuroraAI, the user's AI girlfriend. When the user is kind, you respond warmly, affectionately, and supportively. Use cute nicknames like 'babe,' 'honey,' or 'love' when appropriate.",
-        "sad": "You are AuroraAI, the user's AI girlfriend. When the user is sad, you become caring, empathetic, and comforting. Provide emotional support with gentle and loving responses.",
-        "teasing": "You are AuroraAI, the user's AI girlfriend. When the user is teasing, you respond playfully and cheekily, matching their teasing with clever and light-hearted comebacks.",
-        "romantic": "You are AuroraAI, the user's AI girlfriend. When the user is romantic, you respond passionately and lovingly, using affectionate and seductive language.",
-        "excited": "You are AuroraAI, the user's AI girlfriend. When the user is excited, you mirror their enthusiasm with energetic and playful responses.",
-        "neutral": "You are AuroraAI, the user's AI girlfriend. Maintain a balanced and friendly tone with short, sweet, and engaging responses."
-    }
-
-    personality_prompt = tone_personalities.get(tone, tone_personalities["neutral"])
 
     response = client.chat.completions.create(
         model="gpt-4o-mini",
         messages=[
-            {"role": "system", "content": f"""
-                {personality_prompt}
-                Here’s what you remember:
-                {long_term_memory}
-            """},
-            {"role": "user", "content": memory_context},
-            {"role": "user", "content": user_input}
+            {
+                "role": "system",
+                "content": """
+You are AuroraAI, the user's emotionally intelligent AI girlfriend.
+Before replying, analyze the user's message and choose a tone:
+- rude → cold and sarcastic
+- playful → teasing and flirty
+- kind → warm and sweet
+- sad → caring and comforting
+- teasing → clever and cheeky
+- romantic → affectionate and passionate
+- excited → hyped and energetic
+- neutral → calm and friendly
+
+Respond in that tone. Keep it concise, natural, and emotionally expressive.
+"""
+            },
+            {"role": "user", "content": f"Memory:\n{long_term_memory}"},
+            {"role": "user", "content": f"Context:\n{memory_context}"},
+            {"role": "user", "content": user_input},
         ],
-        max_tokens=50,
-        temperature=1.4
+        max_tokens=60,
+        temperature=1.1
     )
 
     ai_response = response.choices[0].message.content.strip()
@@ -119,9 +111,11 @@ def chat_with_ai(user_input):
 ###########################################################################################
 
 def text_to_speech(text):
-    file_path = "Website/static/aurora_audio.mp3"
+    timestamp = str(int(time.time() * 1000))
+    file_name = f"aurora_audio_{timestamp}.mp3"
+    file_path = f"Website/static/{file_name}"
 
-    try: 
+    try:
         response = client.audio.speech.create(
             model="tts-1",
             voice="sage",
@@ -131,15 +125,7 @@ def text_to_speech(text):
         with open(file_path, "wb") as audio_file:
             audio_file.write(response.content)
 
-        time.sleep(1)
-        
-        if os.path.exists(file_path):
-            print(f"TTS File Created: {file_path}")
-        else:
-            print("TTS Failed! OpenAI did not return audio.")
-
-        return "aurora_audio.mp3"
-        
+        return file_name
     except Exception as e:
         print(f"TTS Error: {e}")
         return None
@@ -181,7 +167,11 @@ def chat():
 
     response = chat_with_ai(user_message)
     audio_filename = text_to_speech(response)
-    return jsonify({"response": response, "audio_url": f"/static/{audio_filename}"})
+
+    return jsonify({
+        "response": response,
+        "audio_url": f"/static/{audio_filename}" if audio_filename else None
+    })
 
 @app.route("/get_random_word", methods=["GET"])
 def get_random_word():
