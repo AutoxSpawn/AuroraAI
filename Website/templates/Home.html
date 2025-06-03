@@ -1,16 +1,18 @@
 <!DOCTYPE html>
 <html lang="en" class="light-theme size-medium font-poppins">
 <head>
-
+  <!-- apply new html class   -->
   <script>
     document.addEventListener('DOMContentLoaded', function() {
-      const html = document.documentElement;
-      
-      const theme = localStorage.getItem('selectedTheme') || (localStorage.getItem('selectedLightTheme')|| "sky-theme");
-      const size = localStorage.getItem('selectedFontSize') || "size-medium";
-      const font = localStorage.getItem('selectedFontClass') || "font-poppins";
-      
-      html.className = `${theme} ${size} ${font}`;
+        const html = document.documentElement;
+        const isDarkMode = localStorage.getItem('isDarkMode') === 'true';
+        const theme = isDarkMode 
+            ? localStorage.getItem('selectedDarkTheme') || "space-theme"
+            : localStorage.getItem('selectedLightTheme') || "sky-theme";
+        const size = localStorage.getItem('selectedFontSize') || "size-medium";
+        const font = localStorage.getItem('selectedFontClass') || "font-poppins";
+        
+        html.className = `${theme} ${size} ${font}`;
     });
   </script>     
     
