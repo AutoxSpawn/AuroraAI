@@ -153,11 +153,11 @@ def contact():
 
 @app.route("/delete_audio", methods=["POST"])
 def delete_audio():
-    file_path = "Website/static/aurora_audio.mp3"
-    if os.path.exists(file_path):
-        os.remove(file_path)
-        return jsonify({"status": "delete"}), 200
-    return jsonify({"error": "file not found"}), 404 
+    folder = "Website/static"
+    for filename in os.listdir(folder):
+        if filename.startswith("aurora_audio_") and filename.endswith(".mp3"):
+            os.remove(os.path.join(folder, filename))
+    return jsonify({"status": "cleaned"}), 200 
 
 @app.route("/chat", methods=["POST"])
 def chat():
