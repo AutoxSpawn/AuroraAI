@@ -32,7 +32,7 @@
 
 <body>
     <header>
-        <div class="logo">Aurora AI</div>
+        <div class="AuroraText">Aurora AI</div>
         <nav>
             <ul>
                 <li><a href="{{ url_for('home') }}">Home</a></li>
@@ -52,7 +52,7 @@
                     With features like Text-To-Speech, AuroraAI creates a more personal experience, 
                     making it feel as if the chatbot is right there with you.
                 </p>
-                <a href="../templates/contact.html" class="contact-button">Contact</a>
+                <a href="{{ url_for('contact') }}" class="contact-button">Contact</a>
             </div>
             <div class="mascot-float">
                 <img src="../static/images/blinkchibi.gif" alt="Floating Mascot" class="blink-chibi">
@@ -90,7 +90,7 @@
         </p>
     </footer>
 
-<!-- Star Animation -->
+    <!-- Star Animation -->
     <div class="star-container"></div>
 
 
