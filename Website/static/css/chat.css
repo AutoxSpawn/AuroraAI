@@ -6,7 +6,7 @@
   justify-content: center;
   align-items: center;
   z-index: 10;
-  pointer-events: none; 
+  pointer-events: none;
 }
 
 .chatbox-overlay img {
@@ -59,7 +59,7 @@
 }
 
 .ai-message {
-  background-color: var(--ai-chatbox-bg); /* Highlights Ai's response */ 
+  background-color: var(--ai-chatbox-bg); /* Highlights Ai's response */
   padding: 8px 12px;
   border-radius: 15px 15px 0 15px;
   max-width: 60%;
@@ -122,74 +122,73 @@
 }
 
 /* Aurora typing animation - Steven */
-@keyframes bounce { 
-  0% { 
-    transform: translateY(0px); 
-  } 
-  50% { 
-    transform: translateY(-3px); 
-  } 
-  100% { 
-    transform: translateY(0px); 
-  } 
-} 
- 
-.bouncy-letter { 
-  display: inline-block; 
-  animation: bounce 0.8s ease-in-out; 
-  opacity: 0; 
-  animation-fill-mode: forwards; 
-} 
- 
-.bouncy-letter:nth-child(1) { 
-  animation-delay: 0s; 
-} 
-.bouncy-letter:nth-child(2) { 
-  animation-delay: 0.05s; 
-} 
-.bouncy-letter:nth-child(3) { 
-  animation-delay: 0.1s; 
-} 
-.bouncy-letter:nth-child(4) { 
-  animation-delay: 0.15s; 
-} 
-.bouncy-letter:nth-child(5) { 
-  animation-delay: 0.2s; 
-} 
-.bouncy-letter:nth-child(6) { 
-  animation-delay: 0.25s; 
-} 
+@keyframes bounce {
+  0% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-3px);
+  }
+  100% {
+    transform: translateY(0px);
+  }
+}
 
+.bouncy-letter {
+  display: inline-block;
+  animation: bounce 0.8s ease-in-out;
+  opacity: 0;
+  animation-fill-mode: forwards;
+}
+
+.bouncy-letter:nth-child(1) {
+  animation-delay: 0s;
+}
+.bouncy-letter:nth-child(2) {
+  animation-delay: 0.05s;
+}
+.bouncy-letter:nth-child(3) {
+  animation-delay: 0.1s;
+}
+.bouncy-letter:nth-child(4) {
+  animation-delay: 0.15s;
+}
+.bouncy-letter:nth-child(5) {
+  animation-delay: 0.2s;
+}
+.bouncy-letter:nth-child(6) {
+  animation-delay: 0.25s;
+}
 
 /* Typing Indicator - Steven */
-.typing-indicator { 
-  display: inline-block; 
-  position: relative; 
-  font-size: 14px; 
-  font-weight: bold; 
-  font-style: italic; 
-  color: var(--typing-indicator); 
-  text-align: center; 
-  margin-top: 20px; 
-  animation: typingDots 2s infinite ease-in-out; 
-} 
+.typing-indicator {
+  display: inline-block;
+  position: relative;
+  font-size: 14px;
+  font-weight: bold;
+  font-style: italic;
+  color: var(--typing-indicator);
+  text-align: center;
+  margin-top: 20px;
+  animation: typingDots 2s infinite ease-in-out;
+}
 
-.typing-indicator::after { 
-  content: "(ᗒᗣᗕ)"; 
-  font-size: 14px; 
-  animation: typingDots 2s infinite ease-in-out; 
-} 
- 
-@keyframes typingDots { 
-  0% { 
+.typing-indicator::after {
+  content: "(ᗒᗣᗕ)";
+  font-size: 14px;
+  animation: typingDots 2s infinite ease-in-out;
+}
+
+@keyframes typingDots {
+  0% {
     opacity: 0;
-  } 
-  50% { 
+  }
+  50% {
     opacity: 1;
   }
-  100% { 
+  100% {
     opacity: 0;
-  } 
+  }
 }
 
 /* Game Catalog Styles */
@@ -278,7 +277,7 @@
   cursor: pointer;
   display: flex;
   align-items: center;
-  gap: 8px;  
+  gap: 8px;
   transition: all 0.3s ease;
 }
 
@@ -288,7 +287,6 @@
   transform: scale(1.05);
   box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
 }
-
 
 /*Have not change any color start from here  */
 
