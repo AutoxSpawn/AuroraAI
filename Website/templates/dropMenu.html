@@ -24,24 +24,23 @@
           </label>
           <span class="slider"></span>
         </div>
-      </div>
 
-      <h2 class="menu-header-title" style="margin-top: 1.5em;">Overlay Effects</h2>
-      <div class="overlay-effects">
-        <label style="display: block; margin-bottom: 0.4em;">
-          <input type="radio" name="overlayEffect" value="overlay-none" checked>
-          None
-        </label>
-        <label style="display: block; margin-bottom: 0.4em;">
-          <input type="radio" name="overlayEffect" value="overlay-aurora">
-          Aurora
-        </label>
-        <label style="display: block;">
-          <input type="radio" name="overlayEffect" value="overlay-eclipse">
-          Eclipse
-        </label>
+        <h2 class="menu-header-title" style="margin-top: 1.5em;">Overlay Effects</h2>
+        <div class="overlay-effects">
+          <label style="display: block; margin-bottom: 0.4em;">
+            <input type="radio" name="overlayEffect" value="overlay-none" checked>
+            None
+          </label>
+          <label style="display: block; margin-bottom: 0.4em;">
+            <input type="radio" name="overlayEffect" value="overlay-aurora">
+            Aurora
+          </label>
+          <label style="display: block;">
+            <input type="radio" name="overlayEffect" value="overlay-eclipse">
+            Eclipse
+          </label>
+        </div>
       </div>
-    </div>
 
       <div class="menu-divider"></div>
   
@@ -56,35 +55,32 @@
 <script>
   //Theme Switcher
   function themeSwitcher() {
-      const savedLightTheme = localStorage.getItem("selectedLightTheme") || "sky-theme";
-      const savedDarkTheme = localStorage.getItem("selectedDarkTheme") || "space-theme";
-      
       // Set up radio buttons if they exist
       const lightThemeRadio = document.getElementById("light-theme");
       const darkThemeRadio = document.getElementById("dark-theme");
       
       if (lightThemeRadio && darkThemeRadio) {
-          const currentTheme = localStorage.getItem("currentTheme") || savedLightTheme;
+        const isDarkMode = localStorage.getItem("isDarkMode") === 'true';
           
-          if (currentTheme === "dark-theme") {
+          if (isDarkMode) {
             darkThemeRadio.checked = true;
           } else {
-            lightThemeRadio.checked = true
+            lightThemeRadio.checked = true;
           };
           
           lightThemeRadio.addEventListener("change", () => {
             localStorage.setItem("isDarkMode", "false");
-            applyTheme(savedLightTheme)
+            applyTheme();
           });
 
           darkThemeRadio.addEventListener("change", () => {
             localStorage.setItem("isDarkMode", "true");
-            applyTheme(savedDarkTheme);
+            applyTheme();
           });
       }
   }
 
-   function applyTheme() {
+  function applyTheme() {
     const html = document.documentElement;
     const isDarkMode = localStorage.getItem("isDarkMode") === 'true';
     const theme = isDarkMode
