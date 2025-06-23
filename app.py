@@ -7,9 +7,9 @@ import time
 import subprocess
 import sys
 import random
+from threading import Thread
 
-
-
+# Load environment variables
 load_dotenv()
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 
@@ -18,14 +18,16 @@ if not OPENAI_API_KEY:
 
 client = OpenAI(api_key=OPENAI_API_KEY)
 
+# Database connection
 def get_db_connection():
     conn = sqlite3.connect("aurora_memory.db")
     conn.row_factory = sqlite3.Row
     return conn
 
+# Initialize database
 with get_db_connection() as conn:
     conn.execute("""
-        CREATE TABLE IF NOT EXISTS chat_memory (
+        CREATE TABLE IF NOT EXISTS "chat_memory" (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             user_message TEXT,
             ai_response TEXT
@@ -33,16 +35,19 @@ with get_db_connection() as conn:
     """)
     conn.commit()
 
+# Save chat memory
 def save_memory(user_message, ai_response):
     with get_db_connection() as conn:
         conn.execute("INSERT INTO chat_memory (user_message, ai_response) VALUES (?, ?)", (user_message, ai_response))
         conn.commit()
 
+# Retrieve last conversations
 def get_last_conversations(limit=20):
     with get_db_connection() as conn:
         cursor = conn.execute("SELECT user_message, ai_response FROM chat_memory ORDER BY id DESC LIMIT ?", (limit,))
         return cursor.fetchall()
 
+# Summarize long-term memory
 def summarize_memory():
     past_conversations = get_last_conversations(50)
     context = "\n".join([f"You: {m['user_message']}\nAuroraAI: {m['ai_response']}" for m in past_conversations])
@@ -62,6 +67,7 @@ def summarize_memory():
 
     return summary
 
+# Chat with AI (Girlfriend Personality with Tone Detection)
 def chat_with_ai(user_input):
     import re
     import random
@@ -90,7 +96,7 @@ def chat_with_ai(user_input):
         "act like you’re tired of their nonsense (but love them)"
     ])
 
-    # Step 1: Detect tone
+    # Detect tone
     tone_response = client.chat.completions.create(
         model="gpt-4o-mini",
         messages=[
@@ -112,7 +118,7 @@ def chat_with_ai(user_input):
     tone = re.sub(r"[^\w]", "", tone)
     print(f"[Detected tone]: {tone}")
 
-    # Step 2: Tone + randomized variation + ultra-human prompt
+    # The AI prompt that generates everything and gives the AI rules to follow
     personality_prompt = f"""
 You are Aurora, the user's girlfriend. Not a bot. Not a fantasy. You’re just a real girl texting your boyfriend in real time.
 
@@ -159,7 +165,7 @@ You are not AI. Not magic. Not a narrator. You’re Aurora. You’re just textin
 ONLY respond with your message. No intro. No narration. No roleplay.
 """
 
-    # Step 3: Generate the response
+    # Generate the response
     response = client.chat.completions.create(
         model="gpt-4o-mini",
         messages=[
@@ -181,8 +187,7 @@ ONLY respond with your message. No intro. No narration. No roleplay.
 
     return ai_response
 
-###########################################################################################
-
+# text-to-speech function
 def text_to_speech(text):
     timestamp = str(int(time.time() * 1000))
     file_name = f"aurora_audio_{timestamp}.mp3"
@@ -203,9 +208,7 @@ def text_to_speech(text):
         print(f"TTS Error: {e}")
         return None
 
-############################################################################################  
-
-# Flask Web Application
+# Flask Web Application / all of the @app.routes that connects everything together
 app = Flask(__name__, template_folder="Website/templates", static_folder="Website/static")
 
 @app.route("/")
@@ -214,15 +217,19 @@ def intro():
 
 @app.route("/home")
 def home():
-    return render_template("Home.html")
+    return render_template("home.html")
 
 @app.route("/about")
 def about():
-    return render_template("About.html")
+    return render_template("about.html")
 
 @app.route("/contact")
 def contact():
-    return render_template("Contact.html")
+    return render_template("contact.html")
+
+@app.route("/setting")
+def setting():
+    return render_template("setting.html")
 
 @app.route("/delete_audio", methods=["POST"])
 def delete_audio():
@@ -230,7 +237,8 @@ def delete_audio():
     for filename in os.listdir(folder):
         if filename.startswith("aurora_audio_") and filename.endswith(".mp3"):
             os.remove(os.path.join(folder, filename))
-    return jsonify({"status": "cleaned"}), 200 
+    return jsonify({"status": "cleaned"}), 200
+
 
 @app.route("/chat", methods=["POST"])
 def chat():
@@ -246,12 +254,6 @@ def chat():
         "audio_url": f"/static/{audio_filename}" if audio_filename else None
     })
 
-@app.route("/get_random_word", methods=["GET"])
-def get_random_word():
-    with open("wordlist.sh", "r") as f:
-        words = [line.strip() for line in f if len(line.strip()) == 5]
-    random_word = random.choice(words)
-    return jsonify({"word": random_word})
 
 @app.route("/launchPong", methods=["POST"])
 def launchPong():
@@ -270,6 +272,13 @@ def launchTugOfWar():
         return jsonify({"status": "Tug of War launched!"}), 200
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+
+@app.route("/get_random_word", methods=["GET"])
+def get_random_word():
+    with open("wordlist.sh", "r") as f:
+        words = [line.strip() for line in f if len(line.strip()) == 5]
+    random_word = random.choice(words)
+    return jsonify({"word": random_word})
     
 @app.route("/launchClickRunner", methods=["POST"])
 def launchClickRunner():
